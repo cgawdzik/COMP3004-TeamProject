@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+#include <QDateTime>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +21,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    void setupDateTime();
+    void updateDateTime();
+    QTimer *dateTimeTimer;
+
 };
 #endif // MAINWINDOW_H

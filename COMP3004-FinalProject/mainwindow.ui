@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -323,9 +323,9 @@
    <widget class="QLCDNumber" name="Time">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>32</y>
-      <width>101</width>
+      <x>260</x>
+      <y>20</y>
+      <width>151</width>
       <height>41</height>
      </rect>
     </property>
@@ -354,6 +354,19 @@
     </property>
     <property name="text">
      <string>Date</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="AmPmLabel">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>30</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
