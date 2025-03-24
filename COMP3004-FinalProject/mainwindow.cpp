@@ -7,6 +7,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupDateTime();
+    setupBattery();
+
+    // Bolus Button
+    connect(ui->BolusOption, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->BolusScreen);
+    });
+
+    // Options Button
+    connect(ui->OptionsButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
+
+    // Back button on bolus page
+    connect(ui->BolusBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
+    });
 
 }
 
@@ -21,7 +37,6 @@ void MainWindow::setupDateTime()
     connect(dateTimeTimer, &QTimer::timeout, this, &MainWindow::updateDateTime);
     dateTimeTimer->start(1000); // every second
     updateDateTime();
-    setupBattery();
 }
 
 void MainWindow::updateDateTime()
