@@ -22,9 +22,17 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    // For time and date
     void setupDateTime();
     void updateDateTime();
     QTimer *dateTimeTimer;
+
+    // For battery
+    int batteryLevel = 100;
+    QTimer *batteryTimer;
+    void setupBattery();
+    void updateBattery();
+
 
 };
 #endif // MAINWINDOW_H

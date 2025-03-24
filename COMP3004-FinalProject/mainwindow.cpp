@@ -21,6 +21,7 @@ void MainWindow::setupDateTime()
     connect(dateTimeTimer, &QTimer::timeout, this, &MainWindow::updateDateTime);
     dateTimeTimer->start(1000); // every second
     updateDateTime();
+    setupBattery();
 }
 
 void MainWindow::updateDateTime()
@@ -41,6 +42,33 @@ void MainWindow::updateDateTime()
 
     QString ampmString = hour < 12 ? "AM" : "PM";
 
-    ui->Time->display(timeString);         // QLCDNumber: 07:34
-    ui->AmPmLabel->setText(ampmString);    // QLabel: PM
+    ui->Time->display(timeString);
+    ui->AmPmLabel->setText(ampmString);
+    ui->Date->setText(QDate::currentDate().toString("MMMM d, yyyy"));
+
+}
+
+void MainWindow::setupBattery()
+{
+    batteryLevel = 100;  // Start full
+
+    ui->Battery->setMinimum(0);
+    ui->Battery->setMaximum(100);
+    ui->Battery->setValue(batteryLevel);
+    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
+
+    batteryTimer = new QTimer(this);
+    connect(batteryTimer, &QTimer::timeout, this, &MainWindow::updateBattery);
+    batteryTimer->start(60000); // every 60 seconds
+
+}
+
+void MainWindow::updateBattery()
+{
+    if (batteryLevel > 0) {
+        batteryLevel -= 1;  // simulate drain
+    }
+
+    ui->Battery->setValue(batteryLevel);
+    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
 }
