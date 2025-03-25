@@ -24,6 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->HomeScreen);
     });
 
+    // Back button on options page
+    connect(ui->OptionBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
+    });
+
+    // Tandem Logo, Main Screen
+    connect(ui->TandemLogo, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
+    });
+
+    // Tandem Logo, Main Screen
+    connect(ui->StatusButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->StatusScreen);
+    });
+
+
+
 }
 
 MainWindow::~MainWindow()
