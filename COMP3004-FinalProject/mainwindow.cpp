@@ -40,6 +40,41 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
+    // bolous logic follows
+
+    // CGM + ControlIQ Setup
+    cgmSim = new CGMSimulator(this);
+    controlIQ = new ControlIQManager(this);
+    latestGlucose = 6.0;
+    bolusMgr = new BolusManager();
+
+    connect(cgmSim, &CGMSimulator::newGlucoseReading, this, [=](double glucose) {
+        latestGlucose = glucose;
+        controlIQ->handleCGM(glucose);
+    });
+
+    connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=]() {
+        ui->ConfirmButton->setEnabled(false);
+    });
+
+    connect(controlIQ, &ControlIQManager::resumeInsulin, this, [=]() {
+        ui->ConfirmButton->setEnabled(true);
+    });
+
+
+
+    connect(ui->ConfirmButton, &QPushButton::clicked, this, [=]() {
+        double carbs = ui->CarbsSpinBox->value();
+        double bg = ui->GlucoseSpinBox->value();
+        double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
+        bolusMgr->deliverBolus(suggested);
+
+        ui->UnitsLCD->display(suggested); // ← updates the "units" display
+    });
+
+
+    cgmSim->start();
+
 
 }
 

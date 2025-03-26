@@ -23,6 +23,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(COMP3004-FinalProject
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        bolus_manager.h bolus_manager.cpp
+        cgm_simulator.h cgm_simulator.cpp
+        control_iq_manager.h control_iq_manager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET COMP3004-FinalProject APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
