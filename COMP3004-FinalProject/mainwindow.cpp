@@ -29,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->HomeScreen);
     });
 
+    // Back button on personal profiles page
+    connect(ui->PersonalProfileBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
+
     // Tandem Logo, Main Screen
     connect(ui->TandemLogo, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->HomeScreen);
@@ -39,6 +44,35 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->StatusScreen);
     });
 
+    // Personal profiles button on options page
+    connect(ui->PersonalProfilesButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Create profile button on personal profile page
+    connect(ui->CreateProfileButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
+    });
+
+    // Confirm profile button on create profile page
+    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Cancel profile button on create profile page
+    connect(ui->CancelProfileButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Pump settings button on options page
+    connect(ui->PumpSettingsButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PumpSettingsScreen);
+    });
+
+    // Back button on pump settings page
+    connect(ui->PumpSettingsBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
 
     // bolous logic follows
     // CGM + ControlIQ Setup
