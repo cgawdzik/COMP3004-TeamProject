@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QDateTime>
-
+#include <QMessageBox>
 
 #include "cgm_simulator.h"
 #include "control_iq_manager.h"

@@ -104,8 +104,46 @@ MainWindow::MainWindow(QWidget *parent)
         double bg = ui->GlucoseSpinBox->value();
         double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
         bolusMgr->deliverBolus(suggested);
+        if (suggested < 0) suggested = 0; // if negative 0 for lower bound
+        ui->UnitsLCD->display(suggested); // updates the "units" display
+    });
 
-        ui->UnitsLCD->display(suggested); // ← updates the "units" display
+    // View Calculation Button
+    connect(ui->ViewCalculationButton, &QPushButton::clicked, this, [=]() {
+        double carbs = ui->CarbsSpinBox->value();
+        double bg = ui->GlucoseSpinBox->value();
+
+        // Hardcoded parameters used in BolusManager
+        double targetBG = 5.5;
+        double correctionFactor = 2.0;
+        double carbRatio = 10.0;
+
+        double correction = (bg - targetBG) / correctionFactor;
+        if (correction < 0) correction = 0;
+
+        double meal = carbs / carbRatio;
+        double total = correction + meal;
+
+        QString message = QString(
+                              "Bolus Calculation Breakdown:\n\n"
+                              "Glucose: %1 mmol/L\n"
+                              "Target BG: %2 mmol/L\n"
+                              "Correction Factor: %3\n"
+                              "→ Correction Dose: (%1 - %2) / %3 = %4 units\n\n"
+                              "Carbs: %5 g\n"
+                              "Carb Ratio: %6 g/unit\n"
+                              "→ Meal Dose: %5 / %6 = %7 units\n\n"
+                              "Total Suggested Dose: %8 units"
+                              ).arg(bg)
+                              .arg(targetBG)
+                              .arg(correctionFactor)
+                              .arg(correction, 0, 'f', 2)
+                              .arg(carbs)
+                              .arg(carbRatio)
+                              .arg(meal, 0, 'f', 2)
+                              .arg(total, 0, 'f', 2);
+
+        QMessageBox::information(this, "Calculation Breakdown", message);
     });
 
     cgmSim->start();
