@@ -5,6 +5,12 @@
 #include <QTimer>
 #include <QDateTime>
 
+
+#include "cgm_simulator.h"
+#include "control_iq_manager.h"
+#include "bolus_manager.h"
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -33,6 +39,10 @@ private:
     void setupBattery();
     void updateBattery();
 
+    CGMSimulator* cgmSim;
+    ControlIQManager* controlIQ;
+    double latestGlucose;
+    BolusManager* bolusMgr;
 
 };
 #endif // MAINWINDOW_H

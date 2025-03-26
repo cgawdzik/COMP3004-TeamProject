@@ -74,6 +74,41 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->OptionScreen);
     });
 
+    // bolous logic follows
+    // CGM + ControlIQ Setup
+    cgmSim = new CGMSimulator(this);
+    controlIQ = new ControlIQManager(this);
+    latestGlucose = 6.0;
+    bolusMgr = new BolusManager();
+
+    connect(cgmSim, &CGMSimulator::newGlucoseReading, this, [=](double glucose) {
+        latestGlucose = glucose;
+        controlIQ->handleCGM(glucose);
+
+        // Show current glucose and update status if active
+        ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(glucose, 0, 'f', 1));
+    });
+
+    connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=]() {
+        ui->ConfirmButton->setEnabled(false);
+        ui->InsulinStatusLabel->setText("Insulin Suspended — Glucose too low!");
+    });
+
+    connect(controlIQ, &ControlIQManager::resumeInsulin, this, [=]() {
+        ui->ConfirmButton->setEnabled(true);
+        ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(latestGlucose, 0, 'f', 1));
+    });
+
+    connect(ui->ConfirmButton, &QPushButton::clicked, this, [=]() {
+        double carbs = ui->CarbsSpinBox->value();
+        double bg = ui->GlucoseSpinBox->value();
+        double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
+        bolusMgr->deliverBolus(suggested);
+
+        ui->UnitsLCD->display(suggested); // ← updates the "units" display
+    });
+
+    cgmSim->start();
 
 }
 

@@ -969,6 +969,19 @@
      <string>Status</string>
     </property>
    </widget>
+   <widget class="QLabel" name="InsulinStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>111</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -976,7 +989,7 @@
      <x>0</x>
      <y>0</y>
      <width>677</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
