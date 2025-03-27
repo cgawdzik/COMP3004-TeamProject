@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>677</width>
-    <height>472</height>
+    <height>818</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,9 +30,9 @@
    <widget class="QStackedWidget" name="Pages">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>110</y>
-      <width>401</width>
+      <x>10</x>
+      <y>140</y>
+      <width>651</width>
       <height>251</height>
      </rect>
     </property>
@@ -40,13 +40,13 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>210</x>
         <y>20</y>
         <width>191</width>
         <height>32</height>
@@ -59,7 +59,7 @@
      <widget class="QPushButton" name="OptionsButton">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>210</x>
         <y>60</y>
         <width>191</width>
         <height>32</height>
@@ -69,17 +69,17 @@
        <string>Options</string>
       </property>
      </widget>
-     <widget class="QLabel" name="InsulinOnBoardLabel">
+     <widget class="QLabel" name="IOBLabel">
       <property name="geometry">
        <rect>
-        <x>140</x>
-        <y>120</y>
-        <width>151</width>
+        <x>210</x>
+        <y>110</y>
+        <width>231</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Insulin On Board (IOB)</string>
+       <string>Insulin On Board (IOB): 0.00 Units</string>
       </property>
      </widget>
      <widget class="QLabel" name="UnitsLabel">
@@ -134,12 +134,25 @@
        <string>Text</string>
       </property>
      </widget>
+     <widget class="QLabel" name="InsulinStatusLabel">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>120</y>
+        <width>411</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="BolusScreen">
      <widget class="QLCDNumber" name="UnitsLCD">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>250</x>
         <y>10</y>
         <width>101</width>
         <height>31</height>
@@ -149,8 +162,8 @@
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>50</y>
+        <x>370</x>
+        <y>20</y>
         <width>58</width>
         <height>16</height>
        </rect>
@@ -205,23 +218,10 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="ViewCalculationButton">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>180</y>
-        <width>161</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>View Calculation</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="BolusBackButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>120</x>
         <y>10</y>
         <width>100</width>
         <height>32</height>
@@ -234,8 +234,8 @@
      <widget class="QPushButton" name="ConfirmButton">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>10</y>
+        <x>460</x>
+        <y>70</y>
         <width>100</width>
         <height>32</height>
        </rect>
@@ -268,6 +268,32 @@
       </property>
       <property name="text">
        <string>grams</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ViewCalculationButton">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>110</y>
+        <width>161</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>View Calculation</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="InsulinStatusLabel_2">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>180</y>
+        <width>411</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
@@ -881,7 +907,7 @@
    <widget class="QProgressBar" name="BolusLevel">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>480</x>
       <y>80</y>
       <width>118</width>
       <height>23</height>
@@ -969,17 +995,14 @@
      <string>Status</string>
     </property>
    </widget>
-   <widget class="QLabel" name="InsulinStatusLabel">
+   <widget class="QWidget" name="GraphLayout" native="true">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>350</y>
-      <width>411</width>
-      <height>41</height>
+      <x>50</x>
+      <y>380</y>
+      <width>571</width>
+      <height>361</height>
      </rect>
-    </property>
-    <property name="text">
-     <string/>
     </property>
    </widget>
   </widget>
