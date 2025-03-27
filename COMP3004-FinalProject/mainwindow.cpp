@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->OptionScreen);
     });
 
+    // Recharge button on pump settings widget
     connect(ui->RechargeButton, &QPushButton::clicked, this, [=]() {
         batteryLevel = 100;
         ui->Battery->setValue(batteryLevel);
