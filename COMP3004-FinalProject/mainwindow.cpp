@@ -189,7 +189,7 @@ void MainWindow::updateDateTime()
 
 void MainWindow::setupBattery()
 {
-    batteryLevel = 21;  // Start full
+    batteryLevel = 100;  // Start full
 
     ui->Battery->setMinimum(0);
     ui->Battery->setMaximum(100);
