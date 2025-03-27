@@ -11,13 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ProfileListWidget->setStyleSheet(R"(
         QListWidget::item {
             border: 2px solid black; /* Outline */
-            border-radius: 5px; /* Rounded corners */
             padding: 10px; /* More space */
             margin: 5px; /* Space between items */
         }
 
         QListWidget::item:selected {
-            background-color: solid blue; /* Highlight color */
             border: 2px solid blue;
         }
     )");
@@ -65,6 +63,23 @@ MainWindow::MainWindow(QWidget *parent)
     // Create profile button on personal profile page
     connect(ui->CreateProfileButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
+        ui->ProfileNameTextEdit->clear();
+        ui->BasalRateTextEdit->clear();
+        ui->CarbRatioTextEdit->clear();
+        ui->CorrFactorTextEdit->clear();
+        ui->TargetBGTextEdit->clear();
+    });
+
+    // Delete profile button on personal profile page
+    connect(ui->DeleteProfileButton, &QPushButton::clicked, this, [this]() {
+        QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
+           if (selectedItem) {
+               Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
+
+               if (profile) delete profile; // Free memory
+
+               delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
+           }
     });
 
     // Confirm profile button on create profile page
@@ -72,15 +87,38 @@ MainWindow::MainWindow(QWidget *parent)
 //        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
 //    });
     connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]()  {
-        QListWidgetItem *item = new QListWidgetItem(ui->ProfileNameTextEdit->toPlainText());  // Display name
-        Profile* profile = new Profile(ui->ProfileNameTextEdit->toPlainText(),
+        QString profileName = ui->ProfileNameTextEdit->toPlainText();
+        Profile* profile = new Profile(profileName,
                         ui->BasalRateTextEdit->toPlainText().toDouble(),
                       ui->CarbRatioTextEdit->toPlainText().toDouble(),
                         ui->CorrFactorTextEdit->toPlainText().toDouble(),
                         ui->TargetBGTextEdit->toPlainText().toDouble());
+        QList<QListWidgetItem *> matches = ui->ProfileListWidget->findItems(profileName, Qt::MatchExactly);
+        if (!matches.isEmpty()) {
+//            QMessageBox::information(this, "Warning", "Another Profile with the same name exists.\nPlease edit or delete existing profile.");
+//            return;
+            // Replace old profile with same name
+            QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
+            Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
+            if (profile) delete profile; // Free memory
+            delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
+        }
+
+        QListWidgetItem *item = new QListWidgetItem(profile->getName());  // Display name
         item->setData(Qt::UserRole, QVariant::fromValue(profile));  // Store Profile object
         ui->ProfileListWidget->addItem(item);
         ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Edit Button on Profile Selection Page
+    connect(ui->EditProfileButton, &QPushButton::clicked, this, [this]()  {
+        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
+        Profile* profile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
+        ui->ProfileNameTextEdit->setText(profile->getName());
+        ui->BasalRateTextEdit->setText(QString::number(profile->getBasalRate()));
+        ui->CarbRatioTextEdit->setText(QString::number(profile->getCarbRatio()));
+        ui->CorrFactorTextEdit->setText(QString::number(profile->getCorrectionFactor()));
+        ui->TargetBGTextEdit->setText(QString::number(profile->getTargetBG()));
     });
 
     // Cancel profile button on create profile page
