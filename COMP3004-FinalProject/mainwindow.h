@@ -9,7 +9,7 @@
 #include "cgm_simulator.h"
 #include "control_iq_manager.h"
 #include "bolus_manager.h"
-
+#include "glucose_graph_widget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -43,6 +43,14 @@ private:
     ControlIQManager* controlIQ;
     double latestGlucose;
     BolusManager* bolusMgr;
+
+    // Graph
+    GlucoseGraphWidget *glucoseGraph;
+
+    // Insulin on board
+    double currentIOB = 0.0;
+    QTimer *iobTimer;
+
 
 };
 #endif // MAINWINDOW_H
