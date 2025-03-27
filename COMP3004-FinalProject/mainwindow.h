@@ -5,10 +5,12 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QListWidget>
 
 #include "cgm_simulator.h"
 #include "control_iq_manager.h"
 #include "bolus_manager.h"
+#include "profile.h"
 
 
 QT_BEGIN_NAMESPACE

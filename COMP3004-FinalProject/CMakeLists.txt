@@ -17,6 +17,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        bolus_manager.h bolus_manager.cpp
+        cgm_simulator.h cgm_simulator.cpp
+        control_iq_manager.h control_iq_manager.cpp
+        profile.h profile.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
