@@ -189,7 +189,7 @@ void MainWindow::updateDateTime()
 
 void MainWindow::setupBattery()
 {
-    batteryLevel = 100;  // Start full
+    batteryLevel = 21;  // Start full
 
     ui->Battery->setMinimum(0);
     ui->Battery->setMaximum(100);
@@ -210,4 +210,25 @@ void MainWindow::updateBattery()
 
     ui->Battery->setValue(batteryLevel);
     ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
+
+    // Update progress bar and label
+    ui->Battery->setValue(batteryLevel);
+    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
+
+    // Visual warning when low
+    if (batteryLevel <= 20) {
+        ui->BatteryPercentLabel->setStyleSheet("color: red;");
+        QMessageBox::warning(this, "Low Battery", "Battery is critically low. Please recharge soon.");
+    } else {
+        ui->BatteryPercentLabel->setStyleSheet("color: black;");
+    }
+
+    // Shutdown at 0%
+    if (batteryLevel == 0) {
+        ui->ConfirmButton->setEnabled(false);
+        ui->InsulinStatusLabel->setText("Pump shut down due to dead battery!");
+        QMessageBox::critical(this, "Pump Shutdown", "Battery has fully drained. Pump is shutting down.");
+        batteryTimer->stop();
+        cgmSim->stop();
+    }
 }
