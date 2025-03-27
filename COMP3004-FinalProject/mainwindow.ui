@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -1012,9 +1012,9 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>330</y>
+      <y>380</y>
       <width>571</width>
-      <height>411</height>
+      <height>361</height>
      </rect>
     </property>
    </widget>
