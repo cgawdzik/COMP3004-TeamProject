@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -810,7 +810,7 @@
         <x>130</x>
         <y>10</y>
         <width>161</width>
-        <height>61</height>
+        <height>91</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -822,7 +822,7 @@
          <x>0</x>
          <y>0</y>
          <width>159</width>
-         <height>59</height>
+         <height>89</height>
         </rect>
        </property>
        <widget class="QPushButton" name="StopBasalButton">
@@ -849,6 +849,19 @@
         </property>
         <property name="text">
          <string>Configure Basal Rate</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="RechargeButton">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>60</y>
+          <width>161</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Recharge Device</string>
         </property>
        </widget>
       </widget>

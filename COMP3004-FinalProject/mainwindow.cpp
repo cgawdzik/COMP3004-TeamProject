@@ -74,6 +74,28 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->OptionScreen);
     });
 
+    connect(ui->RechargeButton, &QPushButton::clicked, this, [=]() {
+        batteryLevel = 100;
+        ui->Battery->setValue(batteryLevel);
+        ui->BatteryPercentLabel->setText("100%");
+        ui->BatteryPercentLabel->setStyleSheet("color: black;");
+
+        QMessageBox::information(this, "Recharge Complete", "The pump battery has been fully recharged.");
+
+        // Resume if shut down
+        if (!batteryTimer->isActive()) {
+            batteryTimer->start();
+        }
+
+        if (!cgmSim->isRunning()) {
+            cgmSim->start();
+        }
+
+        ui->ConfirmButton->setEnabled(true);
+        ui->InsulinStatusLabel->setText("Pump recharged. Insulin Active.");
+    });
+
+
     // bolous logic follows
     // CGM + ControlIQ Setup
     cgmSim = new CGMSimulator(this);

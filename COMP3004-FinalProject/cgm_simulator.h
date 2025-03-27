@@ -11,12 +11,14 @@ public:
     explicit CGMSimulator(QObject *parent = nullptr);
     void start();
     void stop();
+    bool isRunning() const { return timer.isActive(); }
 
 signals:
     void newGlucoseReading(double value);
 
 private slots:
     void generateReading();
+
 
 private:
     QTimer timer;
