@@ -9,6 +9,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     setupDateTime();
     setupBattery();
+    ui->ProfileListWidget->setStyleSheet(R"(
+        QListWidget::item {
+            border: 2px solid black; /* Outline */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* More space */
+            margin: 5px; /* Space between items */
+        }
+
+        QListWidget::item:selected {
+            background-color: solid blue; /* Highlight color */
+            border: 2px solid blue;
+        }
+    )");
 
     iobTimer = new QTimer(this);
     connect(iobTimer, &QTimer::timeout, this, [=]() {
@@ -71,7 +84,18 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     // Confirm profile button on create profile page
-    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
+//    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
+//        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+//    });
+    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]()  {
+        QListWidgetItem *item = new QListWidgetItem(ui->ProfileNameTextEdit->toPlainText());  // Display name
+        Profile* profile = new Profile(ui->ProfileNameTextEdit->toPlainText(),
+                        ui->BasalRateTextEdit->toPlainText().toDouble(),
+                      ui->CarbRatioTextEdit->toPlainText().toDouble(),
+                        ui->CorrFactorTextEdit->toPlainText().toDouble(),
+                        ui->TargetBGTextEdit->toPlainText().toDouble());
+        item->setData(Qt::UserRole, QVariant::fromValue(profile));  // Store Profile object
+        ui->ProfileListWidget->addItem(item);
         ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
     });
 

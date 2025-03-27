@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
     control_iq_manager.cpp
     glucose_graph_widget.h
     glucose_graph_widget.cpp
+    profile.h
+    profile.cpp
 )
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
