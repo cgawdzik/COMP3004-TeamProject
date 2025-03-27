@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     setupDateTime();
     setupBattery();
     ui->ProfileListWidget->setStyleSheet(R"(
@@ -21,6 +22,21 @@ MainWindow::MainWindow(QWidget *parent)
             border: 2px solid blue;
         }
     )");
+
+    iobTimer = new QTimer(this);
+    connect(iobTimer, &QTimer::timeout, this, [=]() {
+        if (currentIOB > 0.0) {
+            currentIOB = std::max(0.0, currentIOB - 0.05); // simple decay
+            ui->IOBLabel->setText(QString("IOB: %1 units").arg(currentIOB, 0, 'f', 2));
+        }
+    });
+    iobTimer->start(60000); // every 60 sec
+
+
+    glucoseGraph = new GlucoseGraphWidget(this);
+    auto *layout = new QVBoxLayout(ui->GraphLayout);
+    layout->addWidget(glucoseGraph);
+
 
     // Bolus Button
     connect(ui->BolusOption, &QPushButton::clicked, this, [this]() {
@@ -134,16 +150,21 @@ MainWindow::MainWindow(QWidget *parent)
 
         // Show current glucose and update status if active
         ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(glucose, 0, 'f', 1));
+        ui->InsulinStatusLabel_2->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(glucose, 0, 'f', 1));
+        // Add to graph
+        glucoseGraph->addReading(glucose);
     });
 
     connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=]() {
         ui->ConfirmButton->setEnabled(false);
         ui->InsulinStatusLabel->setText("Insulin Suspended — Glucose too low!");
+        ui->InsulinStatusLabel_2->setText("Insulin Suspended — Glucose too low!");
     });
 
     connect(controlIQ, &ControlIQManager::resumeInsulin, this, [=]() {
         ui->ConfirmButton->setEnabled(true);
         ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(latestGlucose, 0, 'f', 1));
+        ui->InsulinStatusLabel_2->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(latestGlucose, 0, 'f', 1));
     });
 
     connect(ui->ConfirmButton, &QPushButton::clicked, this, [=]() {
@@ -151,6 +172,11 @@ MainWindow::MainWindow(QWidget *parent)
         double bg = ui->GlucoseSpinBox->value();
         double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
         bolusMgr->deliverBolus(suggested);
+
+        // Updating Insulin on board
+        currentIOB = suggested;
+        ui->IOBLabel->setText(QString("Insulin On Board %1 units").arg(currentIOB, 0, 'f', 2));
+
         if (suggested < 0) suggested = 0; // if negative 0 for lower bound
         ui->UnitsLCD->display(suggested); // updates the "units" display
     });
