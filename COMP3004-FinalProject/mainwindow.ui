@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>677</width>
+    <width>820</width>
     <height>818</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
      <rect>
       <x>10</x>
       <y>140</y>
-      <width>651</width>
+      <width>611</width>
       <height>251</height>
      </rect>
     </property>
@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -350,7 +350,7 @@
        <string>Carbohydrates</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="weekday">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -363,7 +363,7 @@
        <string>weekday_data</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="basalrate">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -376,7 +376,7 @@
        <string>basalrate_data</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="lastbolus">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -389,7 +389,7 @@
        <string>lastbolus_data</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="carbo">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -969,24 +969,11 @@
      <string>Battery Level:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="TandemLogo">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>161</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TANDEM</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="StatusButton">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>20</y>
+      <x>470</x>
+      <y>30</y>
       <width>161</width>
       <height>32</height>
      </rect>
@@ -1005,13 +992,36 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="TandemLogo">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>240</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/tandem.png</normaloff>images/tandem.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>200</width>
+      <height>200</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>677</width>
+     <width>820</width>
      <height>22</height>
     </rect>
    </property>

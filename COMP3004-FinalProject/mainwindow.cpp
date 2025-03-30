@@ -65,10 +65,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->TandemLogo, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->HomeScreen);
     });
+    //ui->TandemLogo->setIcon(QIcon("images/tandem.png"));
 
-    // Tandem Logo, Main Screen
+    // Status Button, Main Screen
     connect(ui->StatusButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->StatusScreen);
+        updateStatus();
     });
 
     // Personal profiles button on options page
@@ -342,4 +344,52 @@ void MainWindow::updateBattery()
         batteryTimer->stop();
         cgmSim->stop();
     }
+}
+
+void MainWindow::updateStatus()
+{
+    /*
+    QTime currentTime = QTime::currentTime();
+
+    int hour = currentTime.hour();
+    int minute = currentTime.minute();
+
+    // Convert to 12-hour format
+    int hour12 = hour % 12;
+    if (hour12 == 0) hour12 = 12;
+
+    // Format time string manually
+    QString timeString = QString("%1:%2")
+                             .arg(hour12, 2, 10, QChar('0'))
+                             .arg(minute, 2, 10, QChar('0'));
+
+    QString ampmString = hour < 12 ? "AM" : "PM";
+
+    ui->Time->display(timeString);
+    ui->AmPmLabel->setText(ampmString);
+    ui->Date->setText(QDate::currentDate().toString("MMMM d, yyyy"));
+    */
+
+
+    // Set Weekday
+    QDate date = QDate::currentDate();
+    ui->weekday->setText(date.toString("dddd"));
+
+
+
+    // Set Last Basal Rate
+    ui->basalrate->setText(QString::number(batteryLevel) + "%");
+
+
+    // Set Last Bolus Rate
+    double carbs = ui->CarbsSpinBox->value();
+    double bg = ui->GlucoseSpinBox->value();
+    double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
+    ui->lastbolus->setText(QString::number(suggested));
+
+
+    // Set Carbs
+    ui->carbo->setText(QString::number(carbs));
+
+
 }

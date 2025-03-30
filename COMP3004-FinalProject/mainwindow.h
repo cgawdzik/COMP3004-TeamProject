@@ -40,6 +40,7 @@ private:
     QTimer *batteryTimer;
     void setupBattery();
     void updateBattery();
+    void updateStatus();
 
     CGMSimulator* cgmSim;
     ControlIQManager* controlIQ;
