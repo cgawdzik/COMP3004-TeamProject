@@ -64,6 +64,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->OptionScreen);
     });
 
+//+=======================+ STATUS SCREEN +=======================+//
+    connect(ui->StatusBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
+    });
+
 //+=======================+ BOLUS SCREEN +=======================+//
 
     // Back button

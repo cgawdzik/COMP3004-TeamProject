@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -413,6 +413,19 @@
       </property>
       <property name="text">
        <string>carbo_data</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="StatusBackButton">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>100</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
       </property>
      </widget>
     </widget>
@@ -1048,7 +1061,7 @@
      <x>0</x>
      <y>0</y>
      <width>820</width>
-     <height>22</height>
+     <height>37</height>
     </rect>
    </property>
   </widget>
