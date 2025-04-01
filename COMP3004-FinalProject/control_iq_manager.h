@@ -10,14 +10,17 @@ public:
     explicit ControlIQManager(QObject *parent = nullptr);
 
 public slots:
-    void handleCGM(double glucose);
+    bool handleCGM(double glucose);
+    void setBasal(double rate);
+    double getBasal();
 
 signals:
-    void suspendInsulin();
+    void suspendInsulin(int flag);
     void resumeInsulin();
 
 private:
     bool suspended = false;
+    double basalRate;
 };
 
 #endif // CONTROL_IQ_MANAGER_H

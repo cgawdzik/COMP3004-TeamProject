@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -74,12 +74,12 @@
        <rect>
         <x>210</x>
         <y>110</y>
-        <width>231</width>
+        <width>221</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Insulin On Board (IOB): 0.00 Units</string>
+       <string>Insulin On Board (IOB): 0.0</string>
       </property>
      </widget>
      <widget class="QLabel" name="UnitsLabel">
@@ -137,14 +137,27 @@
      <widget class="QLabel" name="InsulinStatusLabel">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>120</y>
-        <width>411</width>
-        <height>41</height>
+        <x>210</x>
+        <y>150</y>
+        <width>371</width>
+        <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string/>
+       <string>Insulin Inactive</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="GlucoseStatusLabel">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>130</y>
+        <width>371</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Glucose: 6 mmol/L</string>
       </property>
      </widget>
     </widget>
@@ -823,7 +836,7 @@
         <x>130</x>
         <y>10</y>
         <width>161</width>
-        <height>91</height>
+        <height>121</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -835,7 +848,7 @@
          <x>0</x>
          <y>0</y>
          <width>159</width>
-         <height>89</height>
+         <height>119</height>
         </rect>
        </property>
        <widget class="QPushButton" name="StopBasalButton">
@@ -868,13 +881,26 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>60</y>
+          <y>90</y>
           <width>161</width>
           <height>25</height>
          </rect>
         </property>
         <property name="text">
          <string>Recharge Device</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="ProfileBasalButton">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>60</y>
+          <width>161</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Set Active Profile Rate</string>
         </property>
        </widget>
       </widget>

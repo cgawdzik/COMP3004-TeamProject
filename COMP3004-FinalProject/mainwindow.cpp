@@ -30,36 +30,17 @@ MainWindow::MainWindow(QWidget *parent)
     });
     iobTimer->start(60000); // every 60 sec
 
-
     glucoseGraph = new GlucoseGraphWidget(this);
     auto *layout = new QVBoxLayout(ui->GraphLayout);
     layout->addWidget(glucoseGraph);
 
+    // CGM + ControlIQ Setup
+    cgmSim = new CGMSimulator(this);
+    controlIQ = new ControlIQManager(this);
+    latestGlucose = 6.0;
+    bolusMgr = new BolusManager();
 
-    // Bolus Button
-    connect(ui->BolusOption, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->BolusScreen);
-    });
-
-    // Options Button
-    connect(ui->OptionsButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->OptionScreen);
-    });
-
-    // Back button on bolus page
-    connect(ui->BolusBackButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->HomeScreen);
-    });
-
-    // Back button on options page
-    connect(ui->OptionBackButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->HomeScreen);
-    });
-
-    // Back button on personal profiles page
-    connect(ui->PersonalProfileBackButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->OptionScreen);
-    });
+//+=======================+ HOME SCREEN +=======================+//
 
     // Tandem Logo, Main Screen
     connect(ui->TandemLogo, &QPushButton::clicked, this, [this]() {
@@ -73,140 +54,24 @@ MainWindow::MainWindow(QWidget *parent)
         updateStatus();
     });
 
-    // Personal profiles button on options page
-    connect(ui->PersonalProfilesButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    // Bolus Button
+    connect(ui->BolusOption, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->BolusScreen);
     });
 
-    // Create profile button on personal profile page
-    connect(ui->CreateProfileButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
-        ui->ProfileNameTextEdit->clear();
-        ui->BasalRateTextEdit->clear();
-        ui->CarbRatioTextEdit->clear();
-        ui->CorrFactorTextEdit->clear();
-        ui->TargetBGTextEdit->clear();
-    });
-
-    // Delete profile button on personal profile page
-    connect(ui->DeleteProfileButton, &QPushButton::clicked, this, [this]() {
-        QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
-           if (selectedItem) {
-               Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
-
-               if (profile) delete profile; // Free memory
-
-               delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
-           }
-    });
-
-    // Confirm profile button on create profile page
-//    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
-//        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
-//    });
-    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]()  {
-        QString profileName = ui->ProfileNameTextEdit->toPlainText();
-        Profile* profile = new Profile(profileName,
-                        ui->BasalRateTextEdit->toPlainText().toDouble(),
-                      ui->CarbRatioTextEdit->toPlainText().toDouble(),
-                        ui->CorrFactorTextEdit->toPlainText().toDouble(),
-                        ui->TargetBGTextEdit->toPlainText().toDouble());
-        QList<QListWidgetItem *> matches = ui->ProfileListWidget->findItems(profileName, Qt::MatchExactly);
-        if (!matches.isEmpty()) {
-//            QMessageBox::information(this, "Warning", "Another Profile with the same name exists.\nPlease edit or delete existing profile.");
-//            return;
-            // Replace old profile with same name
-            QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
-            Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
-            if (profile) delete profile; // Free memory
-            delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
-        }
-
-        QListWidgetItem *item = new QListWidgetItem(profile->getName());  // Display name
-        item->setData(Qt::UserRole, QVariant::fromValue(profile));  // Store Profile object
-        ui->ProfileListWidget->addItem(item);
-        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
-    });
-
-    // Edit Button on Profile Selection Page
-    connect(ui->EditProfileButton, &QPushButton::clicked, this, [this]()  {
-        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
-        Profile* profile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
-        ui->ProfileNameTextEdit->setText(profile->getName());
-        ui->BasalRateTextEdit->setText(QString::number(profile->getBasalRate()));
-        ui->CarbRatioTextEdit->setText(QString::number(profile->getCarbRatio()));
-        ui->CorrFactorTextEdit->setText(QString::number(profile->getCorrectionFactor()));
-        ui->TargetBGTextEdit->setText(QString::number(profile->getTargetBG()));
-    });
-
-    // Cancel profile button on create profile page
-    connect(ui->CancelProfileButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
-    });
-
-    // Pump settings button on options page
-    connect(ui->PumpSettingsButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->PumpSettingsScreen);
-    });
-
-    // Back button on pump settings page
-    connect(ui->PumpSettingsBackButton, &QPushButton::clicked, this, [this]() {
+    // Options Button
+    connect(ui->OptionsButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->OptionScreen);
     });
 
-    // Recharge button on pump settings widget
-    connect(ui->RechargeButton, &QPushButton::clicked, this, [=]() {
-        batteryLevel = 100;
-        ui->Battery->setValue(batteryLevel);
-        ui->BatteryPercentLabel->setText("100%");
-        ui->BatteryPercentLabel->setStyleSheet("color: black;");
+//+=======================+ BOLUS SCREEN +=======================+//
 
-        QMessageBox::information(this, "Recharge Complete", "The pump battery has been fully recharged.");
-
-        // Resume if shut down
-        if (!batteryTimer->isActive()) {
-            batteryTimer->start();
-        }
-
-        if (!cgmSim->isRunning()) {
-            cgmSim->start();
-        }
-
-        ui->ConfirmButton->setEnabled(true);
-        ui->InsulinStatusLabel->setText("Pump recharged. Insulin Active.");
+    // Back button
+    connect(ui->BolusBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
     });
 
-
-    // bolous logic follows
-    // CGM + ControlIQ Setup
-    cgmSim = new CGMSimulator(this);
-    controlIQ = new ControlIQManager(this);
-    latestGlucose = 6.0;
-    bolusMgr = new BolusManager();
-
-    connect(cgmSim, &CGMSimulator::newGlucoseReading, this, [=](double glucose) {
-        latestGlucose = glucose;
-        controlIQ->handleCGM(glucose);
-
-        // Show current glucose and update status if active
-        ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(glucose, 0, 'f', 1));
-        ui->InsulinStatusLabel_2->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(glucose, 0, 'f', 1));
-        // Add to graph
-        glucoseGraph->addReading(glucose);
-    });
-
-    connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=]() {
-        ui->ConfirmButton->setEnabled(false);
-        ui->InsulinStatusLabel->setText("Insulin Suspended — Glucose too low!");
-        ui->InsulinStatusLabel_2->setText("Insulin Suspended — Glucose too low!");
-    });
-
-    connect(controlIQ, &ControlIQManager::resumeInsulin, this, [=]() {
-        ui->ConfirmButton->setEnabled(true);
-        ui->InsulinStatusLabel->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(latestGlucose, 0, 'f', 1));
-        ui->InsulinStatusLabel_2->setText(QString("Glucose: %1 mmol/L — Insulin Active").arg(latestGlucose, 0, 'f', 1));
-    });
-
+    // Confirm button
     connect(ui->ConfirmButton, &QPushButton::clicked, this, [=]() {
         double carbs = ui->CarbsSpinBox->value();
         double bg = ui->GlucoseSpinBox->value();
@@ -259,8 +124,178 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox::information(this, "Calculation Breakdown", message);
     });
 
-    cgmSim->start();
 
+//+=======================+ OPTIONS SCREEN +=======================+//
+
+    // Back button
+    connect(ui->OptionBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HomeScreen);
+    });
+
+    // Personal profiles button
+    connect(ui->PersonalProfilesButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Pump settings button
+    connect(ui->PumpSettingsButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PumpSettingsScreen);
+    });
+
+//+=======================+ PROFILES SCREEN +=======================+//
+
+    // Back button
+    connect(ui->PersonalProfileBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
+
+    // Create profile button
+    connect(ui->CreateProfileButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
+        ui->ProfileNameTextEdit->clear();
+        ui->BasalRateTextEdit->clear();
+        ui->CarbRatioTextEdit->clear();
+        ui->CorrFactorTextEdit->clear();
+        ui->TargetBGTextEdit->clear();
+    });
+
+    // Delete profile button
+    connect(ui->DeleteProfileButton, &QPushButton::clicked, this, [this]() {
+        QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
+           if (selectedItem) {
+               Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
+
+               if (profile) delete profile; // Free memory
+
+               delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
+           }
+    });
+
+    // Confirm profile button
+//    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
+//        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+//    });
+    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]()  {
+        QString profileName = ui->ProfileNameTextEdit->toPlainText();
+        Profile* profile = new Profile(profileName,
+                        ui->BasalRateTextEdit->toPlainText().toDouble(),
+                      ui->CarbRatioTextEdit->toPlainText().toDouble(),
+                        ui->CorrFactorTextEdit->toPlainText().toDouble(),
+                        ui->TargetBGTextEdit->toPlainText().toDouble());
+        QList<QListWidgetItem *> matches = ui->ProfileListWidget->findItems(profileName, Qt::MatchExactly);
+        if (!matches.isEmpty()) {
+//            QMessageBox::information(this, "Warning", "Another Profile with the same name exists.\nPlease edit or delete existing profile.");
+//            return;
+            // Replace old profile with same name
+            QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
+            Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
+            if (profile) delete profile; // Free memory
+            delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
+        }
+
+        QListWidgetItem *item = new QListWidgetItem(profile->getName());  // Display name
+        item->setData(Qt::UserRole, QVariant::fromValue(profile));  // Store Profile object
+        ui->ProfileListWidget->addItem(item);
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Edit Button on Profile Selection Page
+    connect(ui->EditProfileButton, &QPushButton::clicked, this, [this]()  {
+        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
+        Profile* profile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
+        ui->ProfileNameTextEdit->setText(profile->getName());
+        ui->BasalRateTextEdit->setText(QString::number(profile->getBasalRate()));
+        ui->CarbRatioTextEdit->setText(QString::number(profile->getCarbRatio()));
+        ui->CorrFactorTextEdit->setText(QString::number(profile->getCorrectionFactor()));
+        ui->TargetBGTextEdit->setText(QString::number(profile->getTargetBG()));
+    });
+
+    // Cancel profile button on create profile page
+    connect(ui->CancelProfileButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+//+=======================+ PUMP SETTINGS SCREEN +=======================+//
+
+    // Back button
+    connect(ui->PumpSettingsBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
+
+    // Stop delivery button
+    connect(ui->StopBasalButton, &QPushButton::clicked, this, [this]() {
+        controlIQ->setBasal(0);
+    });
+
+    // Set delivery rate button
+    connect(ui->ConfigureBasalButton, &QPushButton::clicked, this, [this]() {
+        controlIQ->setBasal(QInputDialog::getDouble(this, "Basal Rate", "u/hr:", 1.0));
+    });
+
+    // Set delivery rate to basal rate on active profile
+    connect(ui->ProfileBasalButton, &QPushButton::clicked, this, [this]() {
+        //Set to active profile basal rate  (not 0)
+        controlIQ->setBasal(0);
+    });
+
+    // Recharge button
+    connect(ui->RechargeButton, &QPushButton::clicked, this, [=]() {
+        batteryLevel = 100;
+        ui->Battery->setValue(batteryLevel);
+        ui->BatteryPercentLabel->setText("100%");
+        ui->BatteryPercentLabel->setStyleSheet("color: black;");
+
+        QMessageBox::information(this, "Recharge Complete", "The pump battery has been fully recharged.");
+
+        // Resume if shut down
+        if (!batteryTimer->isActive()) {
+            batteryTimer->start();
+        }
+
+        if (!cgmSim->isRunning()) {
+            cgmSim->start();
+        }
+
+        ui->ConfirmButton->setEnabled(true);
+        ui->InsulinStatusLabel->setText("Pump recharged. Insulin Active.");
+    });
+
+//+=======================+ INSULIN DELIVERY LOGIC +=======================+//
+
+    connect(cgmSim, &CGMSimulator::newGlucoseReading, this, [=](double glucose) {
+
+        latestGlucose = glucose;
+        ui->GlucoseStatusLabel->setText(QString("Glucose: %1 mmol/L").arg(latestGlucose, 0, 'f', 1));
+
+        //If insulin not suspended
+        if (controlIQ->handleCGM(glucose)) {
+            latestGlucose -= controlIQ->getBasal() * 5 / 3600;
+            //Decrease glucose by basal delivery for 5 seconds of the u/hr
+        }
+
+        // Add to graph
+        glucoseGraph->addReading(glucose);
+    });
+
+    connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=](int flag) {
+        ui->ConfirmButton->setEnabled(false);
+        if (flag == 0) {
+            ui->InsulinStatusLabel->setText("Insulin Suspended — Glucose too low!");
+            ui->InsulinStatusLabel_2->setText("Insulin Suspended — Glucose too low!");
+        } else if (flag == 1) {
+            ui->InsulinStatusLabel->setText("Insulin Suspended by User");
+            ui->InsulinStatusLabel_2->setText("Insulin Suspended by User");
+        }
+
+    });
+
+    connect(controlIQ, &ControlIQManager::resumeInsulin, this, [=]() {
+        ui->ConfirmButton->setEnabled(true);
+        ui->InsulinStatusLabel->setText(QString("Insulin Active: %2 u/hr").arg(controlIQ->getBasal()));
+        ui->InsulinStatusLabel_2->setText(QString("Insulin Active: %2 u/hr").arg(controlIQ->getBasal()));
+    });
+
+    cgmSim->start();
 }
 
 MainWindow::~MainWindow()
@@ -378,7 +413,7 @@ void MainWindow::updateStatus()
 
 
     // Set Last Basal Rate
-    ui->basalrate->setText(QString::number(batteryLevel) + "%");
+    ui->basalrate->setText(QString::number(controlIQ->getBasal()));
 
 
     // Set Last Bolus Rate
