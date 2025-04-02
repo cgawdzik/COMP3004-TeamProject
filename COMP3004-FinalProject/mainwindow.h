@@ -53,6 +53,8 @@ private:
     // Insulin on board
     double currentIOB = 0.0;
     QTimer *iobTimer;
+    double insulinRemaining = 300.0;
+
 
 
 };

@@ -81,14 +81,30 @@ MainWindow::MainWindow(QWidget *parent)
         double carbs = ui->CarbsSpinBox->value();
         double bg = ui->GlucoseSpinBox->value();
         double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
+
+        if (suggested < 0) suggested = 0; // if negative 0 for lower bound
         bolusMgr->deliverBolus(suggested);
 
         // Updating Insulin on board
         currentIOB = suggested;
         ui->IOBLabel->setText(QString("Insulin On Board %1 units").arg(currentIOB, 0, 'f', 2));
 
-        if (suggested < 0) suggested = 0; // if negative 0 for lower bound
+
         ui->UnitsLCD->display(suggested); // updates the "units" display
+
+        // === Update insulin remaining ===
+        insulinRemaining = std::max(0.0, insulinRemaining - suggested);
+        ui->InsulinRemainingBar->setValue(insulinRemaining);
+
+        if (insulinRemaining < 30.0) {
+            QMessageBox::warning(this, "Low Insulin", "Insulin cartridge is below 10%. Please refill soon.");
+        }
+
+        if (insulinRemaining == 0.0) {
+            ui->ConfirmButton->setEnabled(false);
+            ui->InsulinStatusLabel->setText("Pump stopped — insulin depleted.");
+            QMessageBox::critical(this, "Insulin Depleted", "Insulin has run out. Pump has been stopped.");
+        }
     });
 
     // View Calculation Button
