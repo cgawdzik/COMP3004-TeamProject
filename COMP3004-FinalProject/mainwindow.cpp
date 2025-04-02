@@ -281,6 +281,19 @@ MainWindow::MainWindow(QWidget *parent)
         ui->InsulinStatusLabel->setText("Pump recharged. Insulin Active.");
     });
 
+    // Change Cartridge button logic
+    connect(ui->ChangeCartridgeButton, &QPushButton::clicked, this, [=]() {
+        insulinRemaining = 300.0;
+        ui->InsulinRemainingBar->setValue(insulinRemaining);
+
+        // Re-enable the confirm button (if it was disabled by empty cartridge)
+        ui->ConfirmButton->setEnabled(true);
+        ui->InsulinStatusLabel->setText("Pump Ready");
+
+        QMessageBox::information(this, "Cartridge Replaced", "New 300-unit insulin cartridge inserted successfully.");
+    });
+
+
 //+=======================+ INSULIN DELIVERY LOGIC +=======================+//
 
     connect(cgmSim, &CGMSimulator::newGlucoseReading, this, [=](double glucose) {

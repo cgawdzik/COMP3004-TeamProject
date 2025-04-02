@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -849,7 +849,7 @@
         <x>130</x>
         <y>10</y>
         <width>161</width>
-        <height>121</height>
+        <height>151</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -861,7 +861,7 @@
          <x>0</x>
          <y>0</y>
          <width>159</width>
-         <height>119</height>
+         <height>149</height>
         </rect>
        </property>
        <widget class="QPushButton" name="StopBasalButton">
@@ -914,6 +914,19 @@
         </property>
         <property name="text">
          <string>Set Active Profile Rate</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="ChangeCartridgeButton">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>120</y>
+          <width>161</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New Insulin Cartridge</string>
         </property>
        </widget>
       </widget>
