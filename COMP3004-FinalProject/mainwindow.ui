@@ -1047,24 +1047,27 @@
    <widget class="QPushButton" name="TandemLogo">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>240</y>
-      <width>91</width>
-      <height>51</height>
+      <x>650</x>
+      <y>10</y>
+      <width>151</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>images/tandem.png</normaloff>images/tandem.png</iconset>
+     <iconset resource="resources.qrc">
+      <normaloff>:/images/images/tandem.png</normaloff>:/images/images/tandem.png</iconset>
     </property>
     <property name="iconSize">
      <size>
       <width>200</width>
       <height>200</height>
      </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QProgressBar" name="InsulinRemainingBar">
@@ -1125,6 +1128,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

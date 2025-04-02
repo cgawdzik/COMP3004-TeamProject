@@ -37,6 +37,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_add_executable(COMP3004-FinalProject
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        resources.qrc
     )
 else()
     if(ANDROID)
