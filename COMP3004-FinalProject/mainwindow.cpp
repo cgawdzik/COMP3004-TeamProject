@@ -89,6 +89,12 @@ MainWindow::MainWindow(QWidget *parent)
         currentIOB = suggested;
         ui->IOBLabel->setText(QString("Insulin On Board %1 units").arg(currentIOB, 0, 'f', 2));
 
+        // === Update bolus level progress bar ===
+        constexpr double visualMax = 15.0;
+        int bolusPercent = static_cast<int>((suggested / visualMax) * 100.0);
+        if (bolusPercent > 100) bolusPercent = 100;
+        ui->BolusLevel->setValue(bolusPercent);
+
 
         ui->UnitsLCD->display(suggested); // updates the "units" display
 
