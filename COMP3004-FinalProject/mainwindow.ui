@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -392,27 +392,6 @@
         <widget class="QPushButton" name="pushButton_2">
          <property name="text">
           <string>History</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="StopInsulinButton">
-         <property name="text">
-          <string>STOP INSULIN</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="LoadButton">
-         <property name="text">
-          <string>Load</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="TempRateButton">
-         <property name="text">
-          <string>Temp Rate</string>
          </property>
         </widget>
        </item>
@@ -796,7 +775,7 @@
        <rect>
         <x>130</x>
         <y>10</y>
-        <width>161</width>
+        <width>231</width>
         <height>151</height>
        </rect>
       </property>
@@ -808,7 +787,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>159</width>
+         <width>229</width>
          <height>149</height>
         </rect>
        </property>
@@ -817,12 +796,12 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>161</width>
+          <width>231</width>
           <height>25</height>
          </rect>
         </property>
         <property name="text">
-         <string>Stop Basal Delivery</string>
+         <string>Stop Basal Delivery/Stop Insulin</string>
         </property>
        </widget>
        <widget class="QPushButton" name="ConfigureBasalButton">
@@ -830,12 +809,12 @@
          <rect>
           <x>0</x>
           <y>30</y>
-          <width>161</width>
+          <width>231</width>
           <height>25</height>
          </rect>
         </property>
         <property name="text">
-         <string>Configure Basal Rate</string>
+         <string>Configure Basal Rate/Restart Insulin</string>
         </property>
        </widget>
        <widget class="QPushButton" name="RechargeButton">
@@ -843,7 +822,7 @@
          <rect>
           <x>0</x>
           <y>90</y>
-          <width>161</width>
+          <width>231</width>
           <height>25</height>
          </rect>
         </property>
@@ -856,7 +835,7 @@
          <rect>
           <x>0</x>
           <y>60</y>
-          <width>161</width>
+          <width>231</width>
           <height>25</height>
          </rect>
         </property>
@@ -869,7 +848,7 @@
          <rect>
           <x>0</x>
           <y>120</y>
-          <width>161</width>
+          <width>231</width>
           <height>25</height>
          </rect>
         </property>

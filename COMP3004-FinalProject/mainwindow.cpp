@@ -246,7 +246,15 @@ MainWindow::MainWindow(QWidget *parent)
     // Stop delivery button
     connect(ui->StopBasalButton, &QPushButton::clicked, this, [this]() {
         controlIQ->setBasal(0);
+
+        // Show popup to user
+        QMessageBox::information(this, "Basal Delivery Stopped",
+                                 "Insulin delivery has been stopped. Basal rate is now 0 u/hr.");
+
+        // Disable confirm button for safety
+        ui->ConfirmButton->setEnabled(false);
     });
+
 
     // Set delivery rate button
     connect(ui->ConfigureBasalButton, &QPushButton::clicked, this, [this]() {
