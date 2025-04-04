@@ -309,6 +309,11 @@ MainWindow::MainWindow(QWidget *parent)
         latestGlucose = glucose;
         ui->GlucoseStatusLabel->setText(QString("Glucose: %1 mmol/L").arg(latestGlucose, 0, 'f', 1));
 
+        // Hyperglycemia Warning
+        if (glucose >= 13.0) {
+            QMessageBox::warning(this, "High Glucose", "Hyperglycemia detected! Glucose level is very high.");
+        }
+
         //If insulin not suspended
         if (controlIQ->handleCGM(glucose)) {
             latestGlucose -= controlIQ->getBasal() * 5 / 3600;

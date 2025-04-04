@@ -30,4 +30,3 @@ void ControlIQManager::setBasal(double rate) {
 double ControlIQManager::getBasal() {
    return basalRate;
 }
-
