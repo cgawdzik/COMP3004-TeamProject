@@ -36,7 +36,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 ---
 
-## Team Members
+## Team Members - Each Member and Their Implementations
 
 - **Christopher Gawdzik**
 - Implemented Delivering Bolus Calculations page
