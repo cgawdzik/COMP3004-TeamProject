@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent)
         if (insulinRemaining == 0.0) {
             ui->ConfirmButton->setEnabled(false);
             ui->InsulinStatusLabel->setText("Pump stopped — insulin depleted.");
-            QMessageBox::critical(this, "Insulin Depleted", "Insulin has run out. Pump has been stopped.");
+               QMessageBox::critical(this, "Insulin Depleted", "Insulin has run out. Pump has been stopped.");
         }
     });
 
