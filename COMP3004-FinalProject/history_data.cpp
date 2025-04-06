@@ -52,3 +52,7 @@ double HistoryData::getInsulin(int index){
 double HistoryData::getCorrection(int index){
     return list_correction[index];
 }
+
+double HistoryData::getLastBolus()  {
+    return list_bolus[list_bolus.size() - 1];
+}
