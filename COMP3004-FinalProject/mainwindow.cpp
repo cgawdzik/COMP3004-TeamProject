@@ -330,6 +330,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Edit Button for Basal Schedule in Basal Setting Page
     connect(ui->EditScheduleButton, &QPushButton::clicked, this, [this]() {
        timedState = EDIT;
+       if (!ui->ProfileListWidget->currentItem()) {
+           return;
+       }
        ui->Pages->setCurrentWidget(ui->ProfileBasalScreen);
        QModelIndex selectedIndex = ui->BasalScheduleTableView->selectionModel()->currentIndex();
        if (!selectedIndex.isValid()) {
