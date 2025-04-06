@@ -12,12 +12,15 @@
 #include "bolus_manager.h"
 #include "profile.h"
 #include "glucose_graph_widget.h"
+#include  "basalschedulemodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+enum ProfileState {CREATE, EDIT, NONE};
 
 class MainWindow : public QMainWindow
 {
@@ -55,6 +58,16 @@ private:
     QTimer *iobTimer;
     double insulinRemaining = 300.0;
 
+    // For Profiles
+    Profile* currentProfile;
+    Profile* activeProfile;
+    ProfileState profileState;
+    ProfileState timedState;
+    BasalScheduleModel* model;
+
+    void setupProfiles();
+    QListWidgetItem* findItemForProfile(QListWidget* listWidget, Profile* targetProfile);
+    void updateBolusTable();
 
 
 };
