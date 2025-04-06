@@ -375,6 +375,8 @@ MainWindow::MainWindow(QWidget *parent)
             int row = selectedIndex.row();
             model->removeBasalRow(row);
             model->addBasalRow(newSchedule);
+        } else {
+            delete newSchedule;
         }
         ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
     });
