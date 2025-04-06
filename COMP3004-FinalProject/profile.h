@@ -3,25 +3,36 @@
 
 #include <QString>
 #include <QObject>
+#include <QVector>
+#include "basalschedule.h"
 
 class Profile: public QObject
 {
     Q_OBJECT
 public:
-    explicit Profile(const QString& name, double basalRate, double carbRatio,
-            double correctionFactor, double targetGlucose, QObject *parent = nullptr);
+    explicit Profile(QObject *parent = nullptr);
+
+
+    // getters
     const QString& getName() const {return name;};
-    double getBasalRate() const {return basalRate;};
-    double getCarbRatio() const {return carbRatio;};
-    double getCorrectionFactor() const {return correctionFactor;};
-    double getTargetBG() const {return targetGlucose;};
+    const QVector<BasalSchedule*>& getSchedule() const {return scheduleList;};
+    int getBolusDuration() const {return bolusDuration;};
+    bool getCarb() const {return carb;};
+
+    // setters
+    void setName(const QString& name) {this->name = name;};
+    void setBolusDuration(int time) {bolusDuration = time;};
+    void setCarb(bool set) {carb = set;};
+    void addBasalSchedule(BasalSchedule* schedule);
+
+    void removeBasalSchedule(int index);
+
 
 private:
     QString name;
-    double basalRate;
-    double carbRatio;
-    double correctionFactor;
-    double targetGlucose;
+    QVector<BasalSchedule*> scheduleList;
+    int bolusDuration;
+    bool carb;
 };
 
 #endif // PROFILE_H

@@ -33,6 +33,10 @@ set(PROJECT_SOURCES
     glucose_graph_widget.cpp
     profile.h
     profile.cpp
+    basalschedule.h
+    basalschedule.cpp
+    basalschedulemodel.h
+    basalschedulemodel.cpp
 )
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)

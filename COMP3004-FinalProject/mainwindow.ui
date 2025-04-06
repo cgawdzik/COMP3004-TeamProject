@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
-    <height>818</height>
+    <width>667</width>
+    <height>897</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>140</y>
+      <y>150</y>
       <width>611</width>
       <height>251</height>
      </rect>
@@ -40,7 +40,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="HomeScreen">
      <widget class="QPushButton" name="BolusOption">
@@ -182,7 +182,7 @@
      <widget class="QPushButton" name="BolusBackButton">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>10</x>
         <y>10</y>
         <width>100</width>
         <height>32</height>
@@ -665,8 +665,8 @@
      <widget class="QLabel" name="PersonalProfilePageLabel">
       <property name="geometry">
        <rect>
-        <x>110</x>
-        <y>10</y>
+        <x>210</x>
+        <y>20</y>
         <width>161</width>
         <height>17</height>
        </rect>
@@ -681,10 +681,10 @@
      <widget class="QPushButton" name="CreateProfileButton">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>430</x>
         <y>50</y>
         <width>61</width>
-        <height>51</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -697,10 +697,10 @@
      <widget class="QPushButton" name="DeleteProfileButton">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>110</y>
+        <x>430</x>
+        <y>80</y>
         <width>61</width>
-        <height>51</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -713,7 +713,7 @@
      <widget class="QPushButton" name="PersonalProfileBackButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>10</y>
         <width>100</width>
         <height>32</height>
@@ -726,9 +726,9 @@
      <widget class="QListWidget" name="ProfileListWidget">
       <property name="geometry">
        <rect>
-        <x>60</x>
+        <x>130</x>
         <y>50</y>
-        <width>256</width>
+        <width>291</width>
         <height>192</height>
        </rect>
       </property>
@@ -736,23 +736,269 @@
      <widget class="QPushButton" name="EditProfileButton">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>190</y>
+        <x>430</x>
+        <y>120</y>
         <width>61</width>
-        <height>51</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
        <string>Edit</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="ActivateProfileButton">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>200</y>
+        <width>61</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Activate</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="ProfileCreatorScreen">
+    <widget class="QWidget" name="ProfileOptionScreen">
+     <widget class="QPushButton" name="ProfileOptionsBackButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>61</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="TimedSettingsLabel">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>60</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Timed Settings</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BolusLabel">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>160</y>
+        <width>62</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Bolus</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="TimedSettingsEditButton">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>80</y>
+        <width>61</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BolusSettingEditButton">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>180</y>
+        <width>61</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ProfileNameLabel">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 15px;</string>
+      </property>
+      <property name="text">
+       <string>Profile Name:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ProfileConfirmButton">
+      <property name="geometry">
+       <rect>
+        <x>512</x>
+        <y>10</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Confirm</string>
+      </property>
+     </widget>
+     <widget class="QTableView" name="ProfileTimedSettingsTableView">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>80</y>
+        <width>411</width>
+        <height>71</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="ProfileBolusSettingTableWidget">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>180</y>
+        <width>411</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Duration (Hrs)</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Carbohydrates</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLineEdit" name="ProfileNameLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>14</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="BasalScheduleScreen">
+     <widget class="QPushButton" name="BasalScheduleBackButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>61</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ProfileBasalSettingLabel_2">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>10</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 15px;</string>
+      </property>
+      <property name="text">
+       <string>Timed Settings</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="CreateScheduleButton">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>40</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-weight: bold; font-size: 25px;</string>
+      </property>
+      <property name="text">
+       <string>+</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="DeleteScheduleButton">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>70</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-weight: bold; font-size: 25px;</string>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="EditScheduleButton">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>210</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QTableView" name="BasalScheduleTableView">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>40</y>
+        <width>351</width>
+        <height>201</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="ProfileBasalScreen">
      <widget class="QLabel" name="BasalRateLabel">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>60</y>
+        <x>110</x>
+        <y>80</y>
         <width>121</width>
         <height>17</height>
        </rect>
@@ -767,8 +1013,8 @@
      <widget class="QLabel" name="CarbRatioLabel">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>90</y>
+        <x>110</x>
+        <y>110</y>
         <width>121</width>
         <height>17</height>
        </rect>
@@ -783,8 +1029,8 @@
      <widget class="QLabel" name="CorrFactorLabel">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>120</y>
+        <x>110</x>
+        <y>140</y>
         <width>131</width>
         <height>17</height>
        </rect>
@@ -799,8 +1045,8 @@
      <widget class="QLabel" name="TargetBGLabel">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>150</y>
+        <x>110</x>
+        <y>170</y>
         <width>161</width>
         <height>17</height>
        </rect>
@@ -812,78 +1058,11 @@
        <string>Target Blood Glucose</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="BasalRateTextEdit">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>50</y>
-        <width>111</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 15px;</string>
-      </property>
-      <property name="documentTitle">
-       <string/>
-      </property>
-      <property name="placeholderText">
-       <string>Press to edit</string>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="CarbRatioTextEdit">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>80</y>
-        <width>111</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 15px;</string>
-      </property>
-      <property name="placeholderText">
-       <string>Press to edit</string>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="CorrFactorTextEdit">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>110</y>
-        <width>111</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 15px;</string>
-      </property>
-      <property name="placeholderText">
-       <string>Press to edit</string>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="TargetBGTextEdit">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>140</y>
-        <width>111</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 15px;</string>
-      </property>
-      <property name="placeholderText">
-       <string>Press to edit</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="BasalRateUnitsLabel">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>50</y>
+        <x>450</x>
+        <y>70</y>
         <width>41</width>
         <height>31</height>
        </rect>
@@ -898,8 +1077,8 @@
      <widget class="QLabel" name="CarbRatioUnitsLabel">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>86</y>
+        <x>450</x>
+        <y>100</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -914,8 +1093,8 @@
      <widget class="QLabel" name="CorrFactorUnitsLabel">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>110</y>
+        <x>450</x>
+        <y>130</y>
         <width>41</width>
         <height>31</height>
        </rect>
@@ -930,8 +1109,8 @@
      <widget class="QLabel" name="TargetBGUnitsLabel">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>140</y>
+        <x>450</x>
+        <y>160</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -943,11 +1122,11 @@
        <string>mmol/L</string>
       </property>
      </widget>
-     <widget class="QLabel" name="ProfileNameLabel">
+     <widget class="QLabel" name="TimeLabel">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>16</y>
+        <x>110</x>
+        <y>50</y>
         <width>121</width>
         <height>21</height>
        </rect>
@@ -956,52 +1135,256 @@
        <string notr="true">font-size: 15px;</string>
       </property>
       <property name="text">
-       <string>Profile Name:</string>
+       <string>Time:</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="ProfileNameTextEdit">
+     <widget class="QPushButton" name="BasalSettingConfirmButton">
       <property name="geometry">
        <rect>
-        <x>180</x>
+        <x>510</x>
         <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Confirm</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BasalSettingBackButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>61</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ProfileBasalSettingLabel">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>10</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 15px;</string>
+      </property>
+      <property name="text">
+       <string>Basal Setting</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="TimeLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>40</y>
         <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="BasalRateLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>70</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="CarbRatioLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>100</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="CorrFactorLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>130</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="TargetBGLineEdit">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>160</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="ProfileBolusScreen">
+     <widget class="QLabel" name="BolusSettingsPageLabel">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>10</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Bolus Settings</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BolusSettingBackButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>61</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BolusSettingCarbLabel">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 15px;</string>
+      </property>
+      <property name="text">
+       <string>Carbohydrates:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BolusSettingDurationLabel">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>70</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 15px;</string>
+      </property>
+      <property name="text">
+       <string>Duration:</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="BolusSettingDurationSpinBox">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>65</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BolusSettingDurationUnitLabel">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>60</y>
+        <width>41</width>
         <height>31</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">font-size: 15px;</string>
       </property>
-      <property name="documentTitle">
+      <property name="text">
+       <string>hr(s)</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="BolusSettingCarbRadioButton">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>110</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
        <string/>
       </property>
-      <property name="placeholderText">
-       <string>Press to edit</string>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="CancelProfileButton">
+     <widget class="QPushButton" name="BolusSettingConfirmButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>180</y>
+        <x>510</x>
+        <y>10</y>
         <width>91</width>
-        <height>25</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>&lt;- Cancel</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="ConfirmProfileButton">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>180</y>
-        <width>91</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Confirm -&gt;</string>
+       <string>Confirm</string>
       </property>
      </widget>
     </widget>
@@ -1201,7 +1584,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>360</y>
+      <y>420</y>
       <width>571</width>
       <height>401</height>
      </rect>
@@ -1220,7 +1603,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="resources.qrc">
+     <iconset>
       <normaloff>:/images/images/tandem.png</normaloff>:/images/images/tandem.png</iconset>
     </property>
     <property name="iconSize">
@@ -1284,15 +1667,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>820</width>
+     <width>667</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

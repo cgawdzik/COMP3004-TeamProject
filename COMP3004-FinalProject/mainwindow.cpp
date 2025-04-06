@@ -2,24 +2,13 @@
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     setupDateTime();
     setupBattery();
-    ui->ProfileListWidget->setStyleSheet(R"(
-        QListWidget::item {
-            border: 2px solid black; /* Outline */
-            padding: 10px; /* More space */
-            margin: 5px; /* Space between items */
-        }
-
-        QListWidget::item:selected {
-            border: 2px solid blue;
-        }
-    )");
+    setupProfiles();
 
     iobTimer = new QTimer(this);
     connect(iobTimer, &QTimer::timeout, this, [=]() {
@@ -220,21 +209,25 @@ MainWindow::MainWindow(QWidget *parent)
         ui->Pages->setCurrentWidget(ui->PumpSettingsScreen);
     });
 
-//+=======================+ PROFILES SCREEN +=======================+//
+//+=======================+ PERSONAL PROFILES SCREEN +=======================+//
 
     // Back button
     connect(ui->PersonalProfileBackButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->OptionScreen);
+        profileState = NONE;
+        currentProfile = nullptr;
     });
 
     // Create profile button
     connect(ui->CreateProfileButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
-        ui->ProfileNameTextEdit->clear();
-        ui->BasalRateTextEdit->clear();
-        ui->CarbRatioTextEdit->clear();
-        ui->CorrFactorTextEdit->clear();
-        ui->TargetBGTextEdit->clear();
+        profileState = CREATE;
+        ui->Pages->setCurrentWidget(ui->ProfileOptionScreen);
+        ui->ProfileNameLineEdit->clear();
+
+        Profile* newProfile = new Profile();
+        currentProfile = newProfile;
+        model->setProfile(currentProfile);
+        updateBolusTable();
     });
 
     // Delete profile button
@@ -242,55 +235,217 @@ MainWindow::MainWindow(QWidget *parent)
         QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
            if (selectedItem) {
                Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
-
+               if (profile == activeProfile) {
+                   QMessageBox::StandardButton reply;
+                   reply = QMessageBox::question(this, "Active Profile Deletion",
+                                                    "An active profile is being deleted.\nDo you want to continue?",
+                                                    QMessageBox::Yes | QMessageBox::No);
+                   if (reply == QMessageBox::No) return; // cancel the delete
+                   activeProfile = nullptr;
+               }
                if (profile) delete profile; // Free memory
-
                delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
-           }
-    });
-
-    // Confirm profile button
-//    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]() {
-//        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
-//    });
-    connect(ui->ConfirmProfileButton, &QPushButton::clicked, this, [this]()  {
-        QString profileName = ui->ProfileNameTextEdit->toPlainText();
-        Profile* profile = new Profile(profileName,
-                        ui->BasalRateTextEdit->toPlainText().toDouble(),
-                      ui->CarbRatioTextEdit->toPlainText().toDouble(),
-                        ui->CorrFactorTextEdit->toPlainText().toDouble(),
-                        ui->TargetBGTextEdit->toPlainText().toDouble());
-        QList<QListWidgetItem *> matches = ui->ProfileListWidget->findItems(profileName, Qt::MatchExactly);
-        if (!matches.isEmpty()) {
-//            QMessageBox::information(this, "Warning", "Another Profile with the same name exists.\nPlease edit or delete existing profile.");
-//            return;
-            // Replace old profile with same name
-            QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
-            Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
-            if (profile) delete profile; // Free memory
-            delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(selectedItem));
         }
-
-        QListWidgetItem *item = new QListWidgetItem(profile->getName());  // Display name
-        item->setData(Qt::UserRole, QVariant::fromValue(profile));  // Store Profile object
-        ui->ProfileListWidget->addItem(item);
-        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+        currentProfile = nullptr;
     });
 
     // Edit Button on Profile Selection Page
     connect(ui->EditProfileButton, &QPushButton::clicked, this, [this]()  {
-        ui->Pages->setCurrentWidget(ui->ProfileCreatorScreen);
-        Profile* profile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
-        ui->ProfileNameTextEdit->setText(profile->getName());
-        ui->BasalRateTextEdit->setText(QString::number(profile->getBasalRate()));
-        ui->CarbRatioTextEdit->setText(QString::number(profile->getCarbRatio()));
-        ui->CorrFactorTextEdit->setText(QString::number(profile->getCorrectionFactor()));
-        ui->TargetBGTextEdit->setText(QString::number(profile->getTargetBG()));
+        profileState = EDIT;
+        if (!ui->ProfileListWidget->currentItem()) {
+            return;
+        }
+        currentProfile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
+        ui->ProfileNameLineEdit->setText(currentProfile->getName());
+        model->setProfile(currentProfile);
+        updateBolusTable();
+        ui->Pages->setCurrentWidget(ui->ProfileOptionScreen);
     });
 
-    // Cancel profile button on create profile page
-    connect(ui->CancelProfileButton, &QPushButton::clicked, this, [this]() {
+    // Activate Button
+    connect(ui->ActivateProfileButton, &QPushButton::clicked, this, [this]() {
+        QListWidgetItem *selectedItem = ui->ProfileListWidget->currentItem();
+        if (selectedItem) {
+            if (activeProfile != nullptr) {
+                // Change label of old active profile
+                QListWidgetItem *previousItem = findItemForProfile(ui->ProfileListWidget, activeProfile);
+                previousItem->setText(activeProfile->getName() + ": OFF");
+            }
+
+            // Change label of new active profile
+            Profile *profile = selectedItem->data(Qt::UserRole).value<Profile*>();
+            selectedItem->setText(profile->getName() + ": ON");
+            activeProfile = profile;
+
+            int row = ui->ProfileListWidget->row(selectedItem);
+            QListWidgetItem* item = ui->ProfileListWidget->takeItem(row);
+            ui->ProfileListWidget->insertItem(0, item);
+            ui->ProfileListWidget->setCurrentItem(item);
+        }
+    });
+
+//+=======================+ PROFILE OPTIONS SCREEN +=======================+//
+
+    // Back button
+    connect(ui->ProfileOptionsBackButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+
+    // Edit Button for Timed Settings
+    connect(ui->TimedSettingsEditButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
+    });
+
+    // Edit Button for Bolus Settings
+    connect(ui->BolusSettingEditButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileBolusScreen);
+    });
+
+    // Confirm profile button
+    connect(ui->ProfileConfirmButton, &QPushButton::clicked, this, [this]()  {
+        if (profileState == CREATE) {
+            QString profileName = ui->ProfileNameLineEdit->text();
+
+            // Check for duplicates
+            QList<QListWidgetItem*> matches;
+            for (int i = 0; i < ui->ProfileListWidget->count(); ++i) {
+                QListWidgetItem* item = ui->ProfileListWidget->item(i);
+                if (item->text().section(':', 0, 0).compare(profileName, Qt::CaseSensitive) == 0) {
+                    matches.append(item);
+                }
+            }
+
+            // Matches found
+            if (!matches.isEmpty()) {
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this, "Duplicate Profile Name",
+                                                 "A profile with this name already exists.\nDo you want to replace it?",
+                                                 QMessageBox::Yes | QMessageBox::No);
+                if (reply == QMessageBox::No) return; // cancel the save or creatio
+                // Delete old profile with same name
+                QListWidgetItem *duplicateItem = matches.first();
+                Profile *profile = duplicateItem->data(Qt::UserRole).value<Profile*>();
+                if (profile) delete profile; // Free memory
+                delete ui->ProfileListWidget->takeItem(ui->ProfileListWidget->row(duplicateItem));
+            }
+
+            currentProfile->setName(profileName);
+            QListWidgetItem *item = new QListWidgetItem(currentProfile->getName() + ": OFF");  // Display name
+            item->setData(Qt::UserRole, QVariant::fromValue(currentProfile));  // Store Profile object
+            ui->ProfileListWidget->addItem(item);
+        }
+        else if (profileState == EDIT){
+            currentProfile->setName(ui->ProfileNameLineEdit->text());
+            QListWidgetItem *item = findItemForProfile(ui->ProfileListWidget, currentProfile);
+            QString suffix = item->text().section(':', 1, 1);
+            item->setText(currentProfile->getName() + ":" + suffix);
+        }
+        profileState = NONE;
+        ui->Pages->setCurrentWidget(ui->PersonalProfileScreen);
+    });
+//+=======================+ PROFILE TIMED SETTINGS SCREEN +=======================+//
+
+    // Add Button for Basal Schedule in Timed Settings Page
+    connect(ui->CreateScheduleButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileBasalScreen);
+        timedState = CREATE;
+        ui->TimeLineEdit->setText("0:00");
+        ui->BasalRateLineEdit->clear();
+        ui->CarbRatioLineEdit->clear();
+        ui->CorrFactorLineEdit->clear();
+        ui->TargetBGLineEdit->clear();
+    });
+
+    // Delete Button for Basal Schedule in Timed Settings Page
+    connect(ui->DeleteScheduleButton, &QPushButton::clicked, this, [this]() {
+        QModelIndex selectedIndex = ui->BasalScheduleTableView->selectionModel()->currentIndex();
+        if (selectedIndex.isValid()) {
+            int row = selectedIndex.row();
+            const QVector<BasalSchedule*>& schedule = currentProfile->getSchedule();
+            if (row < schedule.size()) {
+                bool check = model->removeBasalRow(row);
+                if (!check) {
+                       qDebug() << "Failed to remove row";
+                }
+            }
+        } else {
+            qDebug() << "Invalid selected index";
+        }
+    });
+
+    // Back Button for Basal Schedule in Timed Settings Page
+    connect(ui->BasalScheduleBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileOptionScreen);
+    });
+
+    // Edit Button for Basal Schedule in Basal Setting Page
+    connect(ui->EditScheduleButton, &QPushButton::clicked, this, [this]() {
+       timedState = EDIT;
+       ui->Pages->setCurrentWidget(ui->ProfileBasalScreen);
+       QModelIndex selectedIndex = ui->BasalScheduleTableView->selectionModel()->currentIndex();
+       if (!selectedIndex.isValid()) {
+           qDebug() << "Invalid Basal Schedule selection";
+           return;
+       }
+       int row = selectedIndex.row();
+       BasalSchedule* schedule = currentProfile->getSchedule().at(row);
+       ui->TimeLineEdit->setText(schedule->getTime().toString("hh:mm"));
+       ui->BasalRateLineEdit->setText(QString::number(schedule->getBasalRate()));
+       ui->CarbRatioLineEdit->setText(QString::number(schedule->getCarbRatio()));
+       ui->CorrFactorLineEdit->setText(QString::number(schedule->getCorrFactor()));
+       ui->TargetBGLineEdit->setText(QString::number(schedule->getTargetBG()));
+       ui->Pages->setCurrentWidget(ui->ProfileBasalScreen);
+    });
+
+
+//+=======================+ PROFILE BASAL SETTINGS SCREEN +=======================+//
+
+    // Back Button for Basal Schedule in Basal Setting PPage
+    connect(ui->BasalSettingBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
+    });
+
+    // Confirm Button
+    connect(ui->BasalSettingConfirmButton, &QPushButton::clicked, this, [this]() {
+        BasalSchedule* newSchedule = new BasalSchedule(
+                    QTime::fromString(ui->TimeLineEdit->text(), "h:mm"),
+                    ui->BasalRateLineEdit->text().toDouble(),
+                    ui->CarbRatioLineEdit->text().toDouble(),
+                    ui->CorrFactorLineEdit->text().toDouble(),
+                    ui->TargetBGLineEdit->text().toDouble());
+        if (timedState == CREATE) {
+            model->addBasalRow(newSchedule);
+            ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
+        } else if (timedState == EDIT) {
+            QModelIndex selectedIndex = ui->BasalScheduleTableView->selectionModel()->currentIndex();
+            if (!selectedIndex.isValid()) {
+                qDebug() << "Invalid Basal Schedule selection";
+                delete newSchedule;
+                return;
+            }
+            int row = selectedIndex.row();
+            model->removeBasalRow(row);
+            model->addBasalRow(newSchedule);
+        } else {
+            delete newSchedule;
+        }
+        ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
+    });
+
+//+=======================+ PROFILE BOLUS SETTINGS SCREEN +=======================+//
+
+    // Back Button
+    connect(ui->BolusSettingBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->ProfileOptionScreen);
+    });
+
+
+    // Confirm Button for Bolus Setting in Bolus Setting Page
+    connect(ui->BolusSettingConfirmButton, &QPushButton::clicked, this, [this]() {
+        currentProfile->setBolusDuration(ui->BolusSettingDurationSpinBox->value());
+        currentProfile->setCarb(ui->BolusSettingCarbRadioButton->isChecked());
+        updateBolusTable();
+        ui->Pages->setCurrentWidget(ui->ProfileOptionScreen);
     });
 
 //+=======================+ PUMP SETTINGS SCREEN +=======================+//
@@ -607,4 +762,54 @@ void MainWindow::updateHistory(int option)
         }
     }
 
+}
+
+void MainWindow::setupProfiles() {
+    currentProfile = nullptr;
+    activeProfile = nullptr;
+    profileState = NONE;
+    timedState = NONE;
+
+    // setup profile
+    ui->ProfileListWidget->setStyleSheet(R"(
+        QListWidget::item {
+            border: 2px solid black; /* Outline */
+            padding: 10px; /* More space */
+            margin: 5px; /* Space between items */
+        }
+
+        QListWidget::item:selected {
+            border: 2px solid blue;
+            color: black;
+        }
+    )");
+    model = new BasalScheduleModel(currentProfile, this);
+    ui->ProfileTimedSettingsTableView->setModel(model);
+    ui->BasalScheduleTableView->setModel(model);
+}
+
+QListWidgetItem* MainWindow::findItemForProfile(QListWidget* listWidget, Profile* targetProfile) {
+    for (int i = 0; i < listWidget->count(); ++i) {
+        QListWidgetItem* item = listWidget->item(i);
+        Profile* storedProfile = item->data(Qt::UserRole).value<Profile*>();
+        if (storedProfile == targetProfile) {
+            return item;  // Found the matching item
+        }
+    }
+    return nullptr;  // Not found
+}
+
+void MainWindow::updateBolusTable(){
+    QTableWidget* table = ui->ProfileBolusSettingTableWidget;
+    table->clear();
+    table->setRowCount(1);
+    table->setColumnCount(2);
+
+    // Optionally, set header labels
+    table->setHorizontalHeaderLabels(QStringList() << "Duration (Hrs)" << "Carbohydrates");
+
+    QTableWidgetItem* durationItem = new QTableWidgetItem(QString::number(currentProfile->getBolusDuration()));
+    QTableWidgetItem* carbItem = new QTableWidgetItem(QString(currentProfile->getCarb()? "ON" : "OFF"));
+    ui->ProfileBolusSettingTableWidget->setItem(0, 0, durationItem);
+    ui->ProfileBolusSettingTableWidget->setItem(0, 1, carbItem);
 }
