@@ -20,6 +20,11 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 - **Options Menu**
   - Access to simulated settings and additional features
+ 
+- **Profile Management**
+  - Input interface for **Profile Creation**, **Basal Scheduling**, and **Bolus Setting**.
+  - Simulate profile creation, deletion, activation, and modification.
+  - Simulate storing profiles containing scheduled data.
 
 - **Glucose Monitoring**
   - Real-time glucose level **graph** displayed across relevant pages
@@ -50,7 +55,19 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Integrated **Tandem logo** via `resources.qrc`.
   - Implemented warnings for **Hyperglycemia** and **Insulin Too Low**.
   - Created the **Bolus Bar** to visually display the last dose.
-- **Yuki Nakashima**  
+- **Yuki Nakashima**
+  - Implemented Personal Profile Management pages.
+    - Developed a data structure model to display data on each table/list view.
+      - Implemented an MVC architecture to synchronize across tables.
+      - Automatic updating of tables via models.
+    - Visually display active and select profiles automatically.
+    - Built and managed **Profile List**: GUI and profile creation/deletion/modification using states.
+    - Built and managed a list of **Basal Schedules** for each profile: GUI and schedule creation/deletion/modification, also using states.
+    - Built and managed **Bolus Setting** for each profile: GUI and settings for each profile.
+    - Added active profile toggle functionality to switch status and order of profiles in the profile list.
+  - Designed overall GUI layout and navigation in collaboration with **Christopher Gawdzik**.
+  - Contributed to UML Use Cases and one Sequence Diagram alongside all other members.
+  - Created UML State Machine Diagram.
 - **Louis-Philippe Baril**  
 - **Colter Harkins**  
 
