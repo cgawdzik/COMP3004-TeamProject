@@ -58,7 +58,7 @@ private:
 
     // For History
     HistoryData* history;
-    void updateHistory(int index, int value);
+    void updateHistory(int index);
 
 };
 #endif // MAINWINDOW_H

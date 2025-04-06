@@ -46,6 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Status Screen Update at Boot
     updateStatus();
 
+    // History Screen Update at Boot
+    updateHistory(0);
+
 //+=======================+ HOME SCREEN +=======================+//
 
     // Tandem Logo, Main Screen
@@ -120,6 +123,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 
         // History Lists Updating
+
+        // New Entry, Datetime
+        QDateTime datetime = QDateTime::currentDateTime();
+        history->addEntryDateTime(datetime.toString("yyyy-MM-dd hh:mm:ss"));
+
         // New Entry, Basal Rate
         history->addEntryBasal(controlIQ->getBasal());
 
@@ -141,6 +149,12 @@ MainWindow::MainWindow(QWidget *parent)
 
         // New Entry, Correction Factor
         history->addEntryCorrection(correction);
+
+        // New Entry, Carbs
+        history->addEntryCarbs(carbs);
+
+        // New Entry, Glucose
+        history->addEntryGlucose(bg);
 
         // Increment the List Size by 1
         //auto lambda = [history_size]() mutable {
@@ -390,7 +404,7 @@ MainWindow::MainWindow(QWidget *parent)
     //+=======================+ History SCREEN +=======================+//
     connect(ui->HistoryButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->HistoryScreen);
-        updateHistory(0, history->getHistorySize());
+        updateHistory(0);
     });
 
     // Back button
@@ -401,16 +415,14 @@ MainWindow::MainWindow(QWidget *parent)
     // Previous button
     connect(ui->previousButton, &QPushButton::clicked, this, [this]() {
         if(history->getHistoryIndex() > 0){
-            updateHistory(1, history->getHistorySize());
-            qDebug() << history->getHistoryIndex();
+            updateHistory(1);
         }
     });
 
     // Next button
     connect(ui->nextButton, &QPushButton::clicked, this, [this]() {
         if(history->getHistoryIndex() < history->getHistorySize() - 1){
-            updateHistory(2, history->getHistorySize());
-            qDebug() << history->getHistoryIndex();
+            updateHistory(2);
         }
     });
 
@@ -502,62 +514,50 @@ void MainWindow::updateBattery()
 
 void MainWindow::updateStatus()
 {
-    /*
-    QTime currentTime = QTime::currentTime();
 
-    int hour = currentTime.hour();
-    int minute = currentTime.minute();
-
-    // Convert to 12-hour format
-    int hour12 = hour % 12;
-    if (hour12 == 0) hour12 = 12;
-
-    // Format time string manually
-    QString timeString = QString("%1:%2")
-                             .arg(hour12, 2, 10, QChar('0'))
-                             .arg(minute, 2, 10, QChar('0'));
-
-    QString ampmString = hour < 12 ? "AM" : "PM";
-
-    ui->Time->display(timeString);
-    ui->AmPmLabel->setText(ampmString);
-    ui->Date->setText(QDate::currentDate().toString("MMMM d, yyyy"));
-    */
-
-
-    // Set Weekday
-    QDate date = QDate::currentDate();
-    ui->weekday->setText(date.toString("dddd"));
-
-
-
-    // Set Last Basal Rate
-    ui->basalrate->setText(QString::number(controlIQ->getBasal()));
-
+    // Set Datetime
+    QDateTime datetime = QDateTime::currentDateTime();
+    ui->weekday->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));
 
     // Set Last Bolus Rate
-    double carbs = ui->CarbsSpinBox->value();
-    double bg = ui->GlucoseSpinBox->value();
-    double suggested = bolusMgr->calculateSuggestedBolus(bg, carbs);
-    ui->lastbolus->setText(QString::number(suggested));
+    ui->lastbolus->setText(QString::number(history->getLastBolus()));
 
+    // Set Basal Variation
+    if(history->getBasalVariation() >= 0){
+        ui->basalrate->setText("+" + QString::number(history->getBasalVariation()));
+    }
+    else{
+        ui->basalrate->setText(QString::number(history->getBasalVariation()));
+    }
 
-    // Set Carbs
-    ui->carbo->setText(QString::number(carbs));
+    // Set Carbs Variation
+    if(history->getCarbsVariation() >= 0){
+        ui->carbo->setText("+" + QString::number(history->getCarbsVariation()));
+    }
+    else{
+        ui->carbo->setText(QString::number(history->getCarbsVariation()));
+    }
 
-
+    // Set Glucose Variation
+    if(history->getGlucoseVariation() >= 0){
+        ui->glucose->setText("+" + QString::number(history->getGlucoseVariation()));
+    }
+    else{
+        ui->glucose->setText(QString::number(history->getGlucoseVariation()));
+    }
 }
 
-void MainWindow::updateHistory(int option, int value)
+void MainWindow::updateHistory(int option)
 {
 
     if(history->getHistorySize() == 0){
+        ui->date_time->setText("NO DATA");
         ui->currentIndex->setText(QString::number(0));
         ui->totalSize->setText(QString::number(0));
-        ui->basal_data->setText(QString::number(0));
-        ui->bolus_data->setText(QString::number(0));
-        ui->insulin_data->setText(QString::number(0));
-        ui->correction_data->setText(QString::number(0));
+        ui->basal_data->setText("NO DATA");
+        ui->bolus_data->setText("NO DATA");
+        ui->insulin_data->setText("NO DATA");
+        ui->correction_data->setText("NO DATA");
 
         // Disable the Buttons
         ui->previousButton->setDisabled(true);
@@ -572,9 +572,10 @@ void MainWindow::updateHistory(int option, int value)
             history->setHistoryIndex(history->getHistoryIndex() + 1);
         }
 
-        // Set 4 Parameters on the GUI with the Newest Entry
+        // Set 5 Parameters on the GUI with the Newest Entry
         ui->currentIndex->setText(QString::number(history->getHistoryIndex() + 1));
         ui->totalSize->setText(QString::number(history->getHistorySize()));
+        ui->date_time->setText(history->getDateTime(history->getHistoryIndex()));
         ui->basal_data->setText(QString::number(history->getBasal(history->getHistoryIndex())));
         ui->bolus_data->setText(QString::number(history->getBolus(history->getHistoryIndex())));
         ui->insulin_data->setText(QString::number(history->getInsulin(history->getHistoryIndex())));

@@ -21,6 +21,10 @@ void HistoryData::setHistoryIndex(int index){
     historyIndex = index;
 }
 
+void HistoryData::addEntryDateTime(QString data){
+    list_datetime << data;
+}
+
 void HistoryData::addEntryBasal(double data){
     list_basal << data;
 }
@@ -35,6 +39,18 @@ void HistoryData::addEntryInsulin(double data){
 
 void HistoryData::addEntryCorrection(double data){
     list_correction << data;
+}
+
+void HistoryData::addEntryCarbs(double data){
+    list_carbs << data;
+}
+
+void HistoryData::addEntryGlucose(double data){
+    list_glucose << data;
+}
+
+QString HistoryData::getDateTime(int index){
+    return list_datetime[index];
 }
 
 double HistoryData::getBasal(int index){
@@ -53,6 +69,73 @@ double HistoryData::getCorrection(int index){
     return list_correction[index];
 }
 
+double HistoryData::getCarbs(int index){
+    return list_carbs[index];
+}
+
+double HistoryData::getGlucose(int index){
+    return list_glucose[index];
+}
+
+QString HistoryData::getLastDateTime()  {
+    if(list_datetime.size() == 0){
+        return "0";
+    }
+    else{
+        return list_datetime[list_datetime.size() - 1];
+    }
+}
+
 double HistoryData::getLastBolus()  {
-    return list_bolus[list_bolus.size() - 1];
+    if(list_bolus.size() == 0){
+        return 0;
+    }
+    else{
+        return list_bolus[list_bolus.size() - 1];
+    }
+}
+
+bool HistoryData::isBasalEmpty(){
+    if(list_bolus.size() == 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+double HistoryData::getBasalVariation(){
+    if(list_basal.size() == 0){
+        return 0;
+    }
+    else if(list_basal.size() == 1){
+        return list_basal[list_basal.size() - 1];
+    }
+    else{
+        return list_basal[list_basal.size() - 1] - list_basal[list_basal.size() - 2];
+    }
+}
+
+double HistoryData::getCarbsVariation(){
+    if(list_carbs.size() == 0){
+        return 0;
+    }
+    else if(list_carbs.size() == 1){
+        return list_carbs[list_carbs.size() - 1];
+    }
+    else{
+        return list_carbs[list_carbs.size() - 1] - list_carbs[list_carbs.size() - 2];
+    }
+}
+
+double HistoryData::getGlucoseVariation(){
+    if(list_glucose.size() == 0){
+        return 0;
+    }
+    else if(list_glucose.size() == 1){
+        return list_glucose[list_glucose.size() - 1];
+    }
+    else{
+        return list_glucose[list_glucose.size() - 1] - list_glucose[list_glucose.size() - 2];
+    }
 }
