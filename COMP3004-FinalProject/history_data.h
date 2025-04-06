@@ -23,6 +23,8 @@ public:
     double getInsulin(int index);
     double getCorrection(int index);
 
+    double getLastBolus();
+
 
 private:
     QList<double> list_basal;
