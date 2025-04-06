@@ -2,20 +2,30 @@
 
 This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed using **C++ and the Qt Framework** as part of our COMP3004 final project. It emulates key functionalities of the real-world device to provide a safe and interactive environment for understanding insulin delivery, battery monitoring, and glucose management.
 
----
-
 ## Features
 
 - **Home Screen**
   - Real-time clock (12-hour format) with AM/PM
   - Dynamic date display (`Month Day, Year`)
-  - Battery indicator with live percentage and progressive drain
+  - Battery indicator with live percentage, progressive drain, and recharge
+  - Live-updating status labels for **Insulin on Board** and **Glucose Levels**
+  - Insulin remaining progress bar with **low insulin level warning**
+
 - **Bolus Function**
-  - Interface to input carbohydrate and glucose values
-  - Bolus calculation simulation
-  - Return navigation to the home screen
+  - Input interface for **carbohydrates and glucose values**
+  - Simulated **bolus calculation** using **CGM and Control-IQ-inspired logic**
+  - Visual **Bolus Bar** showing last insulin dose
+  - **Hyperglycemia** and **low insulin** warning messages
+  - New insulin cartridge replacement functionality
+
 - **Options Menu**
   - Access to simulated settings and additional features
+
+- **Glucose Monitoring**
+  - Real-time glucose level **graph** displayed across relevant pages
+
+- **Brand Integration**
+  - Embedded **Tandem logo** via `resources.qrc` file
 
 ---
 
@@ -26,12 +36,23 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 ---
 
-## Team Members
+## Team Members - Each Member and Their Implementations
 
-- Christopher Gawdzik
-- Yuki Nakashima  
-- Louis-Philippe Baril  
-- Colter Harkins  
+- **Christopher Gawdzik**
+  - Implemented Delivering Bolus Calculations page
+  - Developed glucose level graph visualizations for each page.
+  - Implemented real-time **Time and Date** display.
+  - Built and managed **Battery system**: GUI, battery drain/recharge, and low-level warning.
+  - Designed overall GUI layout and navigation in collaboration with **Yuki Nakashima**.
+  - Created **Insulin Remaining in Pump Progress Bar** with low insulin warning.
+  - Added functionality for **New Insulin Cartridge** replacement.
+  - Programmed live-updating **Status Labels** for Insulin on Board and Glucose.
+  - Integrated **Tandem logo** via `resources.qrc`.
+  - Implemented warnings for **Hyperglycemia** and **Insulin Too Low**.
+  - Created the **Bolus Bar** to visually display the last dose.
+- **Yuki Nakashima**  
+- **Louis-Philippe Baril**  
+- **Colter Harkins**  
 
 ---
 

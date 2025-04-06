@@ -10,6 +10,7 @@
 #include "cgm_simulator.h"
 #include "control_iq_manager.h"
 #include "bolus_manager.h"
+#include "history_data.h"
 #include "profile.h"
 #include "glucose_graph_widget.h"
 #include  "basalschedulemodel.h"
@@ -69,6 +70,9 @@ private:
     QListWidgetItem* findItemForProfile(QListWidget* listWidget, Profile* targetProfile);
     void updateBolusTable();
 
+    // For History
+    HistoryData* history;
+    void updateHistory(int index);
 
 };
 #endif // MAINWINDOW_H

@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
     cgm_simulator.cpp
     control_iq_manager.h
     control_iq_manager.cpp
+    history_data.cpp
+    history_data.h
     glucose_graph_widget.h
     glucose_graph_widget.cpp
     profile.h
