@@ -40,6 +40,12 @@ MainWindow::MainWindow(QWidget *parent)
     latestGlucose = 6.0;
     bolusMgr = new BolusManager();
 
+    // History Data Setup
+    history = new HistoryData(this);
+
+    // Status Screen Update at Boot
+    updateStatus();
+
 //+=======================+ HOME SCREEN +=======================+//
 
     // Tandem Logo, Main Screen
@@ -111,6 +117,37 @@ MainWindow::MainWindow(QWidget *parent)
             ui->InsulinStatusLabel->setText("Pump stopped — insulin depleted.");
                QMessageBox::critical(this, "Insulin Depleted", "Insulin has run out. Pump has been stopped.");
         }
+
+
+        // History Lists Updating
+        // New Entry, Basal Rate
+        history->addEntryBasal(controlIQ->getBasal());
+
+        // New Entry, Injected Bolus
+        history->addEntryBolus(suggested);
+
+        // New Entry, Insulin Remaining
+        history->addEntryInsulin(insulinRemaining);
+
+        // Calculation of the Correction Factor
+        // Hardcoded parameters used in BolusManager
+        double targetBG = 5.5;
+        double correctionFactor = 2.0;
+        double carbRatio = 10.0;
+
+        // Calculation, 0 if lower
+        double correction = (bg - targetBG) / correctionFactor;
+        if (correction < 0) correction = 0;
+
+        // New Entry, Correction Factor
+        history->addEntryCorrection(correction);
+
+        // Increment the List Size by 1
+        //auto lambda = [history_size]() mutable {
+        //    history_size++;
+        //};
+        history->setHistorySize(history->getHistorySize() + 1);
+
     });
 
     // View Calculation Button
@@ -349,6 +386,35 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     cgmSim->start();
+
+    //+=======================+ History SCREEN +=======================+//
+    connect(ui->HistoryButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->HistoryScreen);
+        updateHistory(0, history->getHistorySize());
+    });
+
+    // Back button
+    connect(ui->HistoryBackButton, &QPushButton::clicked, this, [this]() {
+        ui->Pages->setCurrentWidget(ui->OptionScreen);
+    });
+
+    // Previous button
+    connect(ui->previousButton, &QPushButton::clicked, this, [this]() {
+        if(history->getHistoryIndex() > 0){
+            updateHistory(1, history->getHistorySize());
+            qDebug() << history->getHistoryIndex();
+        }
+    });
+
+    // Next button
+    connect(ui->nextButton, &QPushButton::clicked, this, [this]() {
+        if(history->getHistoryIndex() < history->getHistorySize() - 1){
+            updateHistory(2, history->getHistorySize());
+            qDebug() << history->getHistoryIndex();
+        }
+    });
+
+
 }
 
 MainWindow::~MainWindow()
@@ -479,5 +545,65 @@ void MainWindow::updateStatus()
     // Set Carbs
     ui->carbo->setText(QString::number(carbs));
 
+
+}
+
+void MainWindow::updateHistory(int option, int value)
+{
+
+    if(history->getHistorySize() == 0){
+        ui->currentIndex->setText(QString::number(0));
+        ui->totalSize->setText(QString::number(0));
+        ui->basal_data->setText(QString::number(0));
+        ui->bolus_data->setText(QString::number(0));
+        ui->insulin_data->setText(QString::number(0));
+        ui->correction_data->setText(QString::number(0));
+
+        // Disable the Buttons
+        ui->previousButton->setDisabled(true);
+        ui->nextButton->setDisabled(true);
+    }
+    else{
+        if(option == 1){
+            history->setHistoryIndex(history->getHistoryIndex() - 1);
+        }
+
+        else if(option == 2){
+            history->setHistoryIndex(history->getHistoryIndex() + 1);
+        }
+
+        // Set 4 Parameters on the GUI with the Newest Entry
+        ui->currentIndex->setText(QString::number(history->getHistoryIndex() + 1));
+        ui->totalSize->setText(QString::number(history->getHistorySize()));
+        ui->basal_data->setText(QString::number(history->getBasal(history->getHistoryIndex())));
+        ui->bolus_data->setText(QString::number(history->getBolus(history->getHistoryIndex())));
+        ui->insulin_data->setText(QString::number(history->getInsulin(history->getHistoryIndex())));
+        ui->correction_data->setText(QString::number(history->getCorrection(history->getHistoryIndex())));
+
+
+        // Enable the Buttons when Size is Big Enough
+        if(history->getHistorySize() > 1){
+            ui->previousButton->setDisabled(false);
+            ui->nextButton->setDisabled(false);
+        }
+        else{
+            ui->previousButton->setDisabled(true);
+            ui->nextButton->setDisabled(true);
+        }
+
+        // Button by Index
+        if(history->getHistoryIndex() == 0){
+            ui->previousButton->setDisabled(true);
+            ui->nextButton->setDisabled(false);
+        }
+        else if(history->getHistoryIndex() == history->getHistorySize() - 1){
+            ui->previousButton->setDisabled(false);
+            ui->nextButton->setDisabled(true);
+        }
+        else{
+            ui->previousButton->setDisabled(false);
+            ui->nextButton->setDisabled(false);
+        }
+    }
 
 }

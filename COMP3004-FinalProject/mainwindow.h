@@ -10,6 +10,7 @@
 #include "cgm_simulator.h"
 #include "control_iq_manager.h"
 #include "bolus_manager.h"
+#include "history_data.h"
 #include "profile.h"
 #include "glucose_graph_widget.h"
 
@@ -55,7 +56,9 @@ private:
     QTimer *iobTimer;
     double insulinRemaining = 300.0;
 
-
+    // For History
+    HistoryData* history;
+    void updateHistory(int index, int value);
 
 };
 #endif // MAINWINDOW_H
