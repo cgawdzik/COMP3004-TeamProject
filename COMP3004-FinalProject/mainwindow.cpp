@@ -201,6 +201,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Edit Button on Profile Selection Page
     connect(ui->EditProfileButton, &QPushButton::clicked, this, [this]()  {
         profileState = EDIT;
+        if (!ui->ProfileListWidget->currentItem()) {
+            return;
+        }
         currentProfile = ui->ProfileListWidget->currentItem()->data(Qt::UserRole).value<Profile*>();
         ui->ProfileNameLineEdit->setText(currentProfile->getName());
         model->setProfile(currentProfile);
