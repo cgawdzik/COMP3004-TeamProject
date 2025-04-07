@@ -45,7 +45,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 - **Christopher Gawdzik**
   - Implemented Delivering Bolus Calculations page
-    - On Bolus Calculation page took live inputs for carbs and glucose also show a live display to show the bolus in units
+    - On Bolus Calculation page took live inputs for carbs and glucose. Also contains a live display to show the bolus in units
     - As well as a view calculation button so user can see how the bolus to be delivered is calculated
   - Developed glucose level graph visualizations for each page.
   - Implemented real-time **Time and Date** display.
