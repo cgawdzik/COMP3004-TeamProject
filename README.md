@@ -45,6 +45,8 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 - **Christopher Gawdzik**
   - Implemented Delivering Bolus Calculations page
+    - On Bolus Calculation page took live inputs for carbs and glucose also show a live display to show the bolus in units
+    - As well as a view calculation button so user can see how the bolus to be delivered is calculated
   - Developed glucose level graph visualizations for each page.
   - Implemented real-time **Time and Date** display.
   - Built and managed **Battery system**: GUI, battery drain/recharge, and low-level warning.
@@ -55,6 +57,8 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Integrated **Tandem logo** via `resources.qrc`.
   - Implemented warnings for **Hyperglycemia** and **Insulin Too Low**.
   - Created the **Bolus Bar** to visually display the last dose.
+  - Contributed to UML Use Cases and one Sequence Diagram alongside all other members.
+  - Also created four seperate Sequence Diagrams for Emergency scenarios
 - **Yuki Nakashima**
   - Implemented Personal Profile Management pages.
     - Developed a data structure model to display data on each table/list view.
