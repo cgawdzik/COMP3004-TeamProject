@@ -7,13 +7,6 @@ Lock::Lock(QObject *parent)
 
 bool Lock::createPin() {
 
-
-
-
-
-
-
-
     return false;
 }
 

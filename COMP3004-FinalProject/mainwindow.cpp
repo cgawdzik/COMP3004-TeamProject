@@ -32,24 +32,54 @@ MainWindow::MainWindow(QWidget *parent)
     // History Data Setup
     history = new HistoryData(this);
 
+
+
     // Status Screen Update at Boot
     updateStatus();
 
     // History Screen Update at Boot
     updateHistory(0);
 
+//+=======================+ LOCK SCREEN +=======================+//
+
+    lock = new Lock(this);
+
+    // Forces user to enter a pin from
+    ui->pinEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d{4}"), this));
+    ui->pinEdit->setMaxLength(4);
+
+    // Hides numbers when typed
+    ui->pinEdit->setEchoMode(QLineEdit::Password);
+
+    connect(ui->pinEdit, &QLineEdit::textChanged, [this](const QString &text) {
+        if (text.length() == 4) {
+            if (lock->checkPin(ui->pinEdit->text().toInt()))
+            {
+                ui->Pages->setCurrentWidget(ui->HomeScreen);
+            } else {
+                QMessageBox::warning(this, "Wrong PIN", "Incorrect PIN, please try again");
+                ui->pinEdit->clear();
+            }
+        }
+    });
+
+
 //+=======================+ HOME SCREEN +=======================+//
 
     // Tandem Logo, Main Screen
     connect(ui->TandemLogo, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->HomeScreen);
+        if (!lock->isLocked()) {
+            ui->Pages->setCurrentWidget(ui->HomeScreen);
+        }
     });
     //ui->TandemLogo->setIcon(QIcon("images/tandem.png"));
 
     // Status Button, Main Screen
     connect(ui->StatusButton, &QPushButton::clicked, this, [this]() {
-        ui->Pages->setCurrentWidget(ui->StatusScreen);
-        updateStatus();
+        if (!lock->isLocked()) {
+            ui->Pages->setCurrentWidget(ui->StatusScreen);
+            updateStatus();
+        }
     });
 
     // Bolus Button
@@ -403,7 +433,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 //+=======================+ PROFILE BASAL SETTINGS SCREEN +=======================+//
 
-    // Back Button for Basal Schedule in Basal Setting PPage
+    // Back Button for Basal Schedule in Basal Setting Page
     connect(ui->BasalSettingBackButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->BasalScheduleScreen);
     });
@@ -466,8 +496,6 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox::information(this, "Basal Delivery Stopped",
                                  "Insulin delivery has been stopped. Basal rate is now 0 u/hr.");
 
-        // Disable confirm button for safety
-        ui->ConfirmButton->setEnabled(false);
     });
 
 
@@ -478,7 +506,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set delivery rate to basal rate on active profile
     connect(ui->ProfileBasalButton, &QPushButton::clicked, this, [this]() {
-        //Set to active profile basal rate  (not 0)
+        //Set to active profile basal rate
         controlIQ->setBasal(0);
     });
 
@@ -531,7 +559,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         //If insulin not suspended
         if (controlIQ->handleCGM(glucose)) {
-            latestGlucose -= controlIQ->getBasal() * 5 / 3600;
+            latestGlucose -= controlIQ->getBasal() * 5 / 3600; // * correction factor
             //Decrease glucose by basal delivery for 5 seconds of the u/hr
         }
 
@@ -540,7 +568,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(controlIQ, &ControlIQManager::suspendInsulin, this, [=](int flag) {
-        ui->ConfirmButton->setEnabled(false);
         if (flag == 0) {
             ui->InsulinStatusLabel->setText("Insulin Suspended — Glucose too low!");
             ui->InsulinStatusLabel_2->setText("Insulin Suspended — Glucose too low!");
@@ -557,9 +584,16 @@ MainWindow::MainWindow(QWidget *parent)
         ui->InsulinStatusLabel_2->setText(QString("Insulin Active: %2 u/hr").arg(controlIQ->getBasal()));
     });
 
+    connect(controlIQ, &ControlIQManager::administerBolus, this, [=](double glucoseDeviation) {
+        int correctionFactor = 3.0;
+        bolusMgr->deliverBolus(glucoseDeviation / correctionFactor);
+        QMessageBox::warning(this, "Elevated Glucose Levels", "Glucose exceeding 10.0mmol/L detected, administering boolus");
+    });
+
     cgmSim->start();
 
-    //+=======================+ History SCREEN +=======================+//
+//+=======================+ HISTORY SCREEN +=====================+//
+
     connect(ui->HistoryButton, &QPushButton::clicked, this, [this]() {
         ui->Pages->setCurrentWidget(ui->HistoryScreen);
         updateHistory(0);
@@ -672,37 +706,24 @@ void MainWindow::updateBattery()
 
 void MainWindow::updateStatus()
 {
-
+/*
     // Set Datetime
     QDateTime datetime = QDateTime::currentDateTime();
-    ui->weekday->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));
+    //ui->weekday->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));
 
-    // Set Last Bolus Rate
-    ui->lastbolus->setText(QString::number(history->getLastBolus()));
+   // Set Bolus Info
+   ui->lastBolus_data->setText(QString("Last Bolus: %1 u").arg(QString::number(history->getLastBolus())));
 
-    // Set Basal Variation
-    if(history->getBasalVariation() >= 0){
-        ui->basalrate->setText("+" + QString::number(history->getBasalVariation()));
-    }
-    else{
-        ui->basalrate->setText(QString::number(history->getBasalVariation()));
-    }
+   // Set Current Basal Rate
+   ui->currBasal_data->setText(QString("Current Basal Rate: %1 u/hr").arg(controlIQ->getBasal(), 0, 'f', 1));
 
-    // Set Carbs Variation
-    if(history->getCarbsVariation() >= 0){
-        ui->carbo->setText("+" + QString::number(history->getCarbsVariation()));
-    }
-    else{
-        ui->carbo->setText(QString::number(history->getCarbsVariation()));
-    }
-
-    // Set Glucose Variation
-    if(history->getGlucoseVariation() >= 0){
-        ui->glucose->setText("+" + QString::number(history->getGlucoseVariation()));
-    }
-    else{
-        ui->glucose->setText(QString::number(history->getGlucoseVariation()));
-    }
+   // Set Active Profile Details
+   ui->actProf_data->setText(QString("Active Profile: %1").arg(activeProfile->getName()));
+   ui->carbo_data->setText(QString("Carbohydrates: %1").arg(activeProfile->getCarb()));
+   ui->cf_data->setText(QString("Correction Factor: 1u: %1 mmol/L").arg(latestGlucose));
+   ui->cr_data->setText(QString("Carb Ratio: 1u: %1 g").arg(latestGlucose));
+   ui->bg_data->setText(QString("Target BG: %1 mmol/L").arg(latestGlucose));
+   ui->duration_data->setText(QString("Insulin Duration: %1 hours").arg(activeProfile->getBolusDuration()));*/
 }
 
 void MainWindow::updateHistory(int option)
