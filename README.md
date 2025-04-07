@@ -72,7 +72,16 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Designed overall GUI layout and navigation in collaboration with **Christopher Gawdzik**.
   - Contributed to UML Use Cases and one Sequence Diagram alongside all other members.
   - Created UML State Machine Diagram.
-- **Louis-Philippe Baril**  
+- **Louis-Philippe Baril**
+   - Implemented a History Management Page.
+     - Developed a data structure class (HistoryData) that store the full history data that can be accessed from the program.
+     - Implemented the required previous/next buttons to loop across multiple instance of history states from the screen.
+   - Implemented a Status Screen Page that can be accessed anytime during the program
+     - Developed a system that establish a calculation of the variation between attributes so that the changes can be relevant to the user
+  - Implemented multiple list data structures (**list_basal**, **list_bolus**, ...) that store the history instances by states
+  - Designed the GUI layout buttons and Tandem Logo Button in collaboration with **Christopher Gawdzik**.
+  - Contributed to UML Use Cases and one State Diagram alongside all other members.
+  - Created UML Class Diagram.
 - **Colter Harkins**  
 
 ---
