@@ -4,15 +4,35 @@ ControlIQManager::ControlIQManager(QObject *parent)
     : QObject(parent), basalRate(0) {}
 
 bool ControlIQManager::handleCGM(double glucose) {
-    // Glucose levels below 3.9 are detected
-    if (glucose < 3.9 && !suspended) {
-        suspended = true;
-        emit suspendInsulin(0);
-    } else if (glucose >= 4.5 && !suspended) { // Increase insulin if target glucose greatly exceeded
-        //replace 4.5 with target glucose
-        //increase insulin rate
-    }
-    return suspended;
+   double maxBasal = 2.0;
+
+   //  If glucose is not too high
+   if (glucose < 8.9) {
+       // Glucose is predicted to be at or below minimum (3.9mmol/L), hypoglycemic
+       if (glucose <= 3.9 && !suspended) {
+           suspended = true;
+           emit suspendInsulin(0);
+       } else if (glucose <= 6.25) { // Glucose is predicted to be slightly too low
+           // Decrease basal delivery
+           basalRate -= 0.1;
+           justIncreased = false;
+       }
+       else { suspended = false; }
+   } else { // Glucose is predicted to be slightly too high (>= 8.9mmol/L)
+       // Increase basal delivery
+       basalRate += 0.1;
+       justIncreased = true;
+   }
+
+
+   // If basal rate was just increased or at max, administer bolus
+   // Glucose is predicted to be at or above maximum (10.0mmol/L), hyperglyccemic
+   if (glucose >= 10.0 && (basalRate == maxBasal || justIncreased)) {
+        // Administer bolus
+       emit administerBolus(glucose - 6.1); // Target bg is automatically 6.1
+   }
+
+   return suspended;
 }
 
 void ControlIQManager::setBasal(double rate) {

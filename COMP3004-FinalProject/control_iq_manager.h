@@ -17,10 +17,12 @@ public slots:
 signals:
     void suspendInsulin(int flag);
     void resumeInsulin();
+    void administerBolus(double glucoseDeviation);
 
 private:
     bool suspended = false;
     double basalRate;
+    bool justIncreased = false;
 };
 
 #endif // CONTROL_IQ_MANAGER_H
