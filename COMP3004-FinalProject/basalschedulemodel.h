@@ -34,6 +34,7 @@ public:
     void setProfile(Profile*);
     bool removeBasalRow(int row, const QModelIndex &parent = QModelIndex());
     void addBasalRow(BasalSchedule*, const QModelIndex& parent = QModelIndex());
+    bool moveBasalRow(int prevRow, int newRow, const QModelIndex &parent = QModelIndex());
 
 private:
     Profile* m_profile;  // Pointer to the Profile object

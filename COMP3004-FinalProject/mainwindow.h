@@ -13,7 +13,9 @@
 #include "history_data.h"
 #include "profile.h"
 #include "glucose_graph_widget.h"
-#include  "basalschedulemodel.h"
+#include "basalschedulemodel.h"
+#include "firstrowhighlightdelegate.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
