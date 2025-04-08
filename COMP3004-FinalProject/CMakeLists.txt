@@ -39,6 +39,8 @@ set(PROJECT_SOURCES
     basalschedulemodel.cpp
     firstrowhighlightdelegate.h
     firstrowhighlightdelegate.cpp
+    lock.h
+    lock.cpp
 )
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)

@@ -15,6 +15,7 @@
 #include "glucose_graph_widget.h"
 #include "basalschedulemodel.h"
 #include "firstrowhighlightdelegate.h"
+#include "lock.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -35,6 +36,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    // For lock
+    Lock* lock;
 
     // For time and date
     void setupDateTime();
