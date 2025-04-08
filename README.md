@@ -59,6 +59,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Created the **Bolus Bar** to visually display the last dose.
   - Contributed to UML Use Cases and one Sequence Diagram alongside all other members.
   - Also created four seperate Sequence Diagrams for Emergency scenarios
+  - Created Video required to showcase the required Use Case 6, Delivering a Manual Bolus
 - **Yuki Nakashima**
   - Implemented Personal Profile Management pages.
     - Developed a data structure model to display data on each table/list view.
