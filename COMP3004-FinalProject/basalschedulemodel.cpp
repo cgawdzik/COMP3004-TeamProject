@@ -72,3 +72,27 @@ void BasalScheduleModel::addBasalRow(BasalSchedule* schedule, const QModelIndex 
     m_profile->addBasalSchedule(schedule);
     endInsertRows();
 }
+
+bool BasalScheduleModel::moveBasalRow(int prevRow, int newRow, const QModelIndex &parent) {
+    if (!m_profile) return false;
+
+    const QVector<BasalSchedule*>& scheduleList = m_profile->getSchedule();
+    int count = scheduleList.size();
+    if (prevRow < 0 || prevRow >= count || newRow < 0 || newRow >= count)
+       return false;
+    if (prevRow == newRow)
+       return true;  // No movement needed.
+
+    // When moving downward (i.e. destinationRow > sourceRow), the Qt docs require that you
+    // specify destinationRow+1 for beginMoveRows() because the row is removed first.
+    int beginDestination = (newRow > prevRow) ? newRow + 1 : newRow;
+
+    if (!beginMoveRows(parent, prevRow, newRow, parent, beginDestination))
+       return false;
+
+    // Use QVector's move() function to relocate the element.
+    m_profile->moveBasalSchedule(prevRow, newRow);
+
+    endMoveRows();
+    return true;
+}

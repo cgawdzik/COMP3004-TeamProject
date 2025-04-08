@@ -18,19 +18,22 @@ public:
     const QVector<BasalSchedule*>& getSchedule() const {return scheduleList;};
     int getBolusDuration() const {return bolusDuration;};
     bool getCarb() const {return carb;};
+    BasalSchedule* getActiveSchedule() const {return activeSchedule;};
 
     // setters
     void setName(const QString& name) {this->name = name;};
     void setBolusDuration(int time) {bolusDuration = time;};
     void setCarb(bool set) {carb = set;};
     void addBasalSchedule(BasalSchedule* schedule);
-
-    void removeBasalSchedule(int index);
+    bool removeBasalSchedule(int index);
+    bool activateBasalSchedule(int index);
+    bool moveBasalSchedule(int sourceIndex, int destinationIndex);
 
 
 private:
     QString name;
     QVector<BasalSchedule*> scheduleList;
+    BasalSchedule* activeSchedule;
     int bolusDuration;
     bool carb;
 };

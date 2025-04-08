@@ -37,6 +37,8 @@ set(PROJECT_SOURCES
     basalschedule.cpp
     basalschedulemodel.h
     basalschedulemodel.cpp
+    firstrowhighlightdelegate.h
+    firstrowhighlightdelegate.cpp
     lock.h
     lock.cpp
 )

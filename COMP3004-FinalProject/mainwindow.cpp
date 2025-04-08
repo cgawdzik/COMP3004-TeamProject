@@ -430,6 +430,18 @@ MainWindow::MainWindow(QWidget *parent)
        ui->Pages->setCurrentWidget(ui->ProfileBasalScreen);
     });
 
+    // Activate Button
+    connect(ui->ActivateScheduleButton, &QPushButton::clicked, this, [this]() {
+       QModelIndex selectedIndex = ui->BasalScheduleTableView->selectionModel()->currentIndex();
+       if (!selectedIndex.isValid()) {
+           qDebug() << "Invalid Basal Schedule selection";
+           return;
+       }
+       int row = selectedIndex.row();
+       model->moveBasalRow(row, 0);
+       currentProfile->activateBasalSchedule(row);
+    });
+
 
 //+=======================+ PROFILE BASAL SETTINGS SCREEN +=======================+//
 
@@ -807,6 +819,8 @@ void MainWindow::setupProfiles() {
             color: black;
         }
     )");
+
+    ui->BasalScheduleTableView->setItemDelegate(new FirstRowHighlightDelegate(ui->BasalScheduleTableView));;
     model = new BasalScheduleModel(currentProfile, this);
     ui->ProfileTimedSettingsTableView->setModel(model);
     ui->BasalScheduleTableView->setModel(model);
