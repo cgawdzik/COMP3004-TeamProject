@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>images/tandem.png</file>
+	<file>images/button.png</file>
     </qresource>
 </RCC>

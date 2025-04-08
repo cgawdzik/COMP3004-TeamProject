@@ -53,10 +53,12 @@ else()
     if(ANDROID)
         add_library(COMP3004-FinalProject SHARED
             ${PROJECT_SOURCES}
+            resources.qrc
         )
     else()
         add_executable(COMP3004-FinalProject
             ${PROJECT_SOURCES}
+            resources.qrc
         )
     endif()
 endif()

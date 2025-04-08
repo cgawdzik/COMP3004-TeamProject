@@ -40,6 +40,21 @@ MainWindow::MainWindow(QWidget *parent)
     // History Screen Update at Boot
     updateHistory(0);
 
+//+=======================+ POWER SCREEN +=======================+//
+
+    ui->PowerButton->setIcon(QIcon(":/images/images/button.png"));
+    ui->BlackBox->setStyleSheet("background-color: black;");
+
+
+    connect(ui->PowerButton, &QPushButton::clicked, this, [this]() {
+        if (ui->BlackBox->isVisible())
+        {
+          ui->BlackBox->setVisible(false);
+        } else {
+            ui->BlackBox->setVisible(true);
+        }
+    });
+
 //+=======================+ LOCK SCREEN +=======================+//
 
     lock = new Lock(this);
@@ -72,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->Pages->setCurrentWidget(ui->HomeScreen);
         }
     });
-    //ui->TandemLogo->setIcon(QIcon("images/tandem.png"));
+    ui->TandemLogo->setIcon(QIcon(":/images/images/tandem.png"));
 
     // Status Button, Main Screen
     connect(ui->StatusButton, &QPushButton::clicked, this, [this]() {
@@ -526,8 +541,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->RechargeButton, &QPushButton::clicked, this, [=]() {
         batteryLevel = 100;
         ui->Battery->setValue(batteryLevel);
-        ui->BatteryPercentLabel->setText("100%");
-        ui->BatteryPercentLabel->setStyleSheet("color: black;");
 
         QMessageBox::information(this, "Recharge Complete", "The pump battery has been fully recharged.");
 
@@ -677,7 +690,6 @@ void MainWindow::setupBattery()
     ui->Battery->setMinimum(0);
     ui->Battery->setMaximum(100);
     ui->Battery->setValue(batteryLevel);
-    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
 
     batteryTimer = new QTimer(this);
     connect(batteryTimer, &QTimer::timeout, this, &MainWindow::updateBattery);
@@ -691,19 +703,13 @@ void MainWindow::updateBattery()
         batteryLevel -= 1;  // simulate drain
     }
 
-    ui->Battery->setValue(batteryLevel);
-    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
 
     // Update progress bar and label
     ui->Battery->setValue(batteryLevel);
-    ui->BatteryPercentLabel->setText(QString::number(batteryLevel) + "%");
 
     // Visual warning when low
     if (batteryLevel <= 20) {
-        ui->BatteryPercentLabel->setStyleSheet("color: red;");
         QMessageBox::warning(this, "Low Battery", "Battery is critically low. Please recharge soon.");
-    } else {
-        ui->BatteryPercentLabel->setStyleSheet("color: black;");
     }
 
     // Shutdown at 0%
@@ -718,24 +724,33 @@ void MainWindow::updateBattery()
 
 void MainWindow::updateStatus()
 {
-/*
-    // Set Datetime
-    QDateTime datetime = QDateTime::currentDateTime();
-    //ui->weekday->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));
 
-   // Set Bolus Info
-   ui->lastBolus_data->setText(QString("Last Bolus: %1 u").arg(QString::number(history->getLastBolus())));
+   // Set Datetime
+   QDateTime datetime = QDateTime::currentDateTime();
 
-   // Set Current Basal Rate
-   ui->currBasal_data->setText(QString("Current Basal Rate: %1 u/hr").arg(controlIQ->getBasal(), 0, 'f', 1));
+  // Set Bolus Info
+  ui->lastBolus_data->setText(QString("Last Bolus: %1 u").arg(QString::number(history->getLastBolus())));
 
-   // Set Active Profile Details
-   ui->actProf_data->setText(QString("Active Profile: %1").arg(activeProfile->getName()));
-   ui->carbo_data->setText(QString("Carbohydrates: %1").arg(activeProfile->getCarb()));
-   ui->cf_data->setText(QString("Correction Factor: 1u: %1 mmol/L").arg(latestGlucose));
-   ui->cr_data->setText(QString("Carb Ratio: 1u: %1 g").arg(latestGlucose));
-   ui->bg_data->setText(QString("Target BG: %1 mmol/L").arg(latestGlucose));
-   ui->duration_data->setText(QString("Insulin Duration: %1 hours").arg(activeProfile->getBolusDuration()));*/
+  // Set Current Basal Rate
+  ui->currBasal_data->setText(QString("Current Basal Rate: %1 u/hr").arg(controlIQ->getBasal(), 0, 'f', 1));
+
+  if (activeProfile != nullptr)  {
+      // Set Active Profile Details
+      ui->actProf_data->setText(QString("Active Profile: %1").arg(activeProfile->getName()));
+      ui->duration_data->setText(QString("Insulin Duration: %1 hours").arg(activeProfile->getBolusDuration()));
+
+      if (activeProfile->getCarb()) {
+          ui->carbo_data->setText(QString("Carbohydrates: %1").arg("ON"));
+      } else {
+          ui->carbo_data->setText(QString("Carbohydrates: %1").arg("OFF"));
+      }
+
+      if (activeProfile->getActiveSchedule() != nullptr) {
+          ui->cf_data->setText(QString("Correction Factor: 1u: %1 mmol/L").arg(activeProfile->getActiveSchedule()->getCorrFactor()));
+          ui->cr_data->setText(QString("Carb Ratio: 1u: %1 g").arg(activeProfile->getActiveSchedule()->getCarbRatio()));
+          ui->bg_data->setText(QString("Target BG: %1 mmol/L").arg(activeProfile->getActiveSchedule()->getTargetBG()));
+      }
+  }
 }
 
 void MainWindow::updateHistory(int option)
