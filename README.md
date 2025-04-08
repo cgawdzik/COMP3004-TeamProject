@@ -82,6 +82,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Designed the GUI layout buttons and Tandem Logo Button in collaboration with **Christopher Gawdzik**.
   - Contributed to UML Use Cases and one State Diagram alongside all other members.
   - Created UML Class Diagram.
+  - Created the Video required to showcase the required Use Case 4, Access Insulin Pump History.
 - **Colter Harkins**  
 
 ---
