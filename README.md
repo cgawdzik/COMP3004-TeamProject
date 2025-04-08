@@ -88,7 +88,22 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 ---
 
+## Compiling Instructions
+
+To compile and execute the program not through Qt Creator, the following commands can be used to create an executable in Linux Ubuntu.
+The commands below include making a build directory to differentiate source and build files, and should be done in the COMP3004-FinalProject directory.
+
+  (in the COMP3004-FinalProject directory)
+  mkdir build
+  cd build
+  cmake ..
+  make
+  ./COMP3004-FinalProject
+
+---
+
 ### Notes
 Some members' VMs did not have the QtCharts module installed to allow the chart to be built for CGM monitoring. If a similar issue arises, the command below can be used to resolve the issue in Linux Ubuntu.
 
   sudo apt-get install libqt5charts5-dev
+
