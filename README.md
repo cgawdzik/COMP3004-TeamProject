@@ -94,11 +94,11 @@ To compile and execute the program not through Qt Creator, the following command
 The commands below include making a build directory to differentiate source and build files, and should be done in the COMP3004-FinalProject directory.
 
   (in the COMP3004-FinalProject directory)
-  mkdir build
-  cd build
-  cmake ..
-  make
-  ./COMP3004-FinalProject
+  `mkdir build`
+  `cd build`
+  `cmake ..`
+  `make`
+  `./COMP3004-FinalProject`
 
 ---
 
