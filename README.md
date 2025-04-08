@@ -98,7 +98,7 @@ The commands below include making a build directory to differentiate source and 
   `cd build`\
   `cmake ..`\
   `make`\
-  `./COMP3004-FinalProject`\
+  `./COMP3004-FinalProject`
 
 ---
 
