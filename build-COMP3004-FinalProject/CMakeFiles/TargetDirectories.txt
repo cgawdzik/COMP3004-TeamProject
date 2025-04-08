@@ -1,8 +1,0 @@
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/COMP3004-FinalProject.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/edit_cache.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/rebuild_cache.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/list_install_components.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/install.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/install/local.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/install/strip.dir
-/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/COMP3004-FinalProject_autogen.dir
