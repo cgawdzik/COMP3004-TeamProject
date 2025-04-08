@@ -84,7 +84,29 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Contributed to UML Use Cases and one State Diagram alongside all other members.
   - Created UML Class Diagram.
   - Created the Video required to showcase the required Use Case 4, Access Insulin Pump History.
-- **Colter Harkins**  
+- **Colter Harkins**
+   - Implemented power button and functionality to turn the screen on/off
+      - Added power off button to options page
+   - Developed a secure lock screen with password authentication
+      - Added change password button to options page
+   - Implemented Dynamic Basal Delivery
+      - Implemented ControlIQ-based basal rate adjustments
+      - Automatically suspends insulin when glucose ≤ 3.9 mmol/L
+      - Administers auto-bolus when glucose ≥ 10.0 mmol/L
+      - Programmed live-updating bar on home page displaying current basal rate if active
+   - Developed all logic for basal insulin adjustments
+      - Stop Delivery Button
+      - Configure Basal Rate Button
+      - Set Active Profile Basal Rate Button
+   - Implemented real-time status updates (updateStatus()) as well as the status button
+   - GUI Development
+      - Created GUI for Lock Screen, Status Screen, Pump Settings Screen, Profile Basal Screen
+   - Created Use Case Models 2, 3, 5, 6
+   - Developed all main scenario sequence diagrams
+   - Ensured system reliability through reliability traceability matrix
+   - Created the videos to showcase
+      - Use Case Model 3: Managing basal insulin delivery
+      - Use Case Model 5: Managing t:slim X2 Insulin Pump
 
 ---
 
@@ -92,6 +114,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
 
 To compile and execute the program not through Qt Creator, the following commands can be used to create an executable in Linux Ubuntu.
 The commands below include making a build directory to differentiate source and build files, and should be done in the COMP3004-FinalProject directory.
+The password to log into the t:Slim X2 pump is "1234".
 
   (in the COMP3004-FinalProject directory)\
   `mkdir build`\
