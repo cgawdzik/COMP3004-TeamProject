@@ -7,7 +7,7 @@ bool ControlIQManager::handleCGM(double glucose) {
    double maxBasal = 2.0;
 
    //  If glucose is not too high
-   if (glucose < 8.9) {
+   if (glucose < 8.9 && basalRate > 0.1) {
        // Glucose is predicted to be at or below minimum (3.9mmol/L), hypoglycemic
        if (glucose <= 3.9 && !suspended) {
            suspended = true;
