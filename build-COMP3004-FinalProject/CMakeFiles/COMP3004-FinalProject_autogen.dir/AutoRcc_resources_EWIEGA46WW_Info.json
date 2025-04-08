@@ -1,0 +1,22 @@
+{
+	"BUILD_DIR" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/COMP3004-FinalProject_autogen",
+	"CMAKE_BINARY_DIR" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/student/Desktop/COMP3004-TeamProject/COMP3004-FinalProject",
+	"CMAKE_SOURCE_DIR" : "/home/student/Desktop/COMP3004-TeamProject/COMP3004-FinalProject",
+	"INCLUDE_DIR" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/COMP3004-FinalProject_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/student/Desktop/COMP3004-TeamProject/COMP3004-FinalProject/images/tandem.png"
+	],
+	"LOCK_FILE" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/COMP3004-FinalProject_autogen.dir/AutoRcc_resources_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "/usr/lib/qt5/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/student/Desktop/COMP3004-TeamProject/build-COMP3004-FinalProject/CMakeFiles/COMP3004-FinalProject_autogen.dir/AutoRcc_resources_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/home/student/Desktop/COMP3004-TeamProject/COMP3004-FinalProject/resources.qrc",
+	"VERBOSITY" : 0
+}
