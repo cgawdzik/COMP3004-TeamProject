@@ -64,15 +64,16 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Implemented Personal Profile Management pages.
     - Developed a data structure model to display data on each table/list view.
       - Implemented an MVC architecture to synchronize across tables.
-      - Automatic updating of tables via models.
-    - Visually display active and select profiles automatically.
+      - Automatic updating of tables via **Qt Abstraction Models**.
+    - Dynamically display active and selected profiles automatically.
     - Built and managed **Profile List**: GUI and profile creation/deletion/modification using states.
-    - Built and managed a list of **Basal Schedules** for each profile: GUI and schedule creation/deletion/modification, also using states.
+    - Built and managed a list of **Basal Schedules** for each profile: GUIs and schedule creation/deletion/modification, also using states.
     - Built and managed **Bolus Setting** for each profile: GUI and settings for each profile.
     - Added active profile toggle functionality to switch status and order of profiles in the profile list.
   - Designed overall GUI layout and navigation in collaboration with **Christopher Gawdzik**.
   - Contributed to UML Use Cases and one Sequence Diagram alongside all other members.
-  - Created UML State Machine Diagram.
+  - Created all UML State Machine Diagrams.
+  - Created Video required to showcase Use Case Model 1 and 2: Setting up, Modifying, and Switching Profiles.
 - **Louis-Philippe Baril**
    - Implemented a History Management Page.
      - Developed a data structure class (HistoryData) that store the full history data that can be accessed from the program.
