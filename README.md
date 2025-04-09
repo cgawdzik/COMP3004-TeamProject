@@ -87,9 +87,7 @@ This project is a simulation of the **Tandem t:slim X2 Insulin Pump** developed 
   - Created the Video required to showcase the required Use Case 4, Access Insulin Pump History.
 - **Colter Harkins**
    - Implemented power button and functionality to turn the screen on/off
-      - Added power off button to options page
    - Developed a secure lock screen with password authentication
-      - Added change password button to options page
    - Implemented Dynamic Basal Delivery
       - Implemented ControlIQ-based basal rate adjustments
       - Automatically suspends insulin when glucose ≤ 3.9 mmol/L
